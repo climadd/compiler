@@ -8,6 +8,7 @@ public enum TokenType {
 	TYFLOAT,
 	PRINT,
 	OP_ASSIGN,
+	//	ASSIGN,
 	PLUS,
 	MINUS,
 	TIMES,

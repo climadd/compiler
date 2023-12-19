@@ -20,14 +20,15 @@ public class Scanner {
 	private Token nextToken;
 	//ottiene il prossimo token oppure null se il prossimo token deve essere letto dal file con la nextToken
 
+	ArrayList<Character> skip = new ArrayList<>(Arrays.asList(' ', '\n','\t','\r',EOF));
+	// skip: insieme caratteri di skip (include EOF)
+	ArrayList<Character> letters = new ArrayList<>(Arrays.asList('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'));
+	// letters: insieme caratteri di lettere
+	ArrayList<Character> digits = new ArrayList<>(Arrays.asList('0','1','2','3','4','5','6','7','8','9'));
+	// digits:insieme di cifre
+
+
 	public Scanner(String fileName) throws IOException {
-		
-		// skip: insieme caratteri di skip (include EOF)
-		ArrayList<Character> skip = new ArrayList<>(Arrays.asList(' ', '\n','\t','\r',EOF));
-		// letters: insieme caratteri di lettere
-		ArrayList<Character> letters = new ArrayList<>(Arrays.asList('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'));
-		// digits:insieme di cifre
-		ArrayList<Character> digits = new ArrayList<>(Arrays.asList('0','1','2','3','4','5','6','7','8','9'));
 
 		// opMap: mapping fra caratteri '+', '-', '*', '/', ';', '=', ';' e il TokenType corrispondente
 		HashMap<Character, TokenType> opMap = new HashMap<Character, TokenType>();
@@ -93,8 +94,6 @@ public class Scanner {
 		// eccezione lessicale dicendo la riga e il carattere che la hanno
 		// provocata. 
 
-
-	}
 
 	// private Token scanNumber()
 
