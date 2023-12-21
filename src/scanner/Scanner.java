@@ -8,92 +8,78 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-
 import token.*;
 
+
 public class Scanner {
-	final char EOF = (char) -1; 
+	final char EOF = (char) -1;
 	private int riga;
-	//riga incrementero' ogni volta che leggo un \n
 	private PushbackReader buffer;
 	private String log;
-	private Token nextToken;
-	//ottiene il prossimo token oppure null se il prossimo token deve essere letto dal file con la nextToken
 
-	ArrayList<Character> skip = new ArrayList<>(Arrays.asList(' ', '\n','\t','\r',EOF));
-	// skip: insieme caratteri di skip (include EOF)
-	ArrayList<Character> letters = new ArrayList<>(Arrays.asList('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'));
+	private ArrayList<Character> skip = new ArrayList<>(Arrays.asList(' ', '\n','\t','\r',EOF));
+	// skip: insieme caratteri di skip
+	private ArrayList<Character> letters = new ArrayList<>(Arrays.asList('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'));
 	// letters: insieme caratteri di lettere
-	ArrayList<Character> digits = new ArrayList<>(Arrays.asList('0','1','2','3','4','5','6','7','8','9'));
+	private ArrayList<Character> digits = new ArrayList<>(Arrays.asList('0','1','2','3','4','5','6','7','8','9'));
 	// digits:insieme di cifre
 
+	HashMap<Character, TokenType> charMap = new HashMap<>(){{
+		put('+',TokenType.PLUS);
+		put('-',TokenType.MINUS);
+		put('*',TokenType.TIMES);
+		put('/',TokenType.DIVIDE);
+		put('=',TokenType.OP_ASSIGN);
+		put(';',TokenType.SEMI);
+	}};
+	//Hashmap operatori
+	HashMap<String, TokenType> keyMap = new HashMap<>(){{
+		put("print",TokenType.PRINT);
+		put("int",TokenType.TYINT);
+		put("float",TokenType.TYFLOAT);
+	}};
+	//Hashmap parole chiave
 
 	public Scanner(String fileName) throws IOException {
-
-		// opMap: mapping fra caratteri '+', '-', '*', '/', ';', '=', ';' e il TokenType corrispondente
-		HashMap<Character, TokenType> opMap = new HashMap<Character, TokenType>();
-		opMap.put('+',TokenType.PLUS);
-		opMap.put('-',TokenType.MINUS);
-		opMap.put('*',TokenType.TIMES);
-		opMap.put('/',TokenType.DIVIDE);
-		opMap.put('=',TokenType.OP_ASSIGN);
-		opMap.put(';',TokenType.SEMI);
-
-		// keyMap: mapping fra le stringhe "print", "float", "int" e il TokenType corrispondente
-		HashMap<String, TokenType> keyMap = new HashMap<String, TokenType>();
-		keyMap.put("print",TokenType.PRINT);
-		keyMap.put("int",TokenType.TYINT);
-		keyMap.put("float",TokenType.TYFLOAT);
-
-
 		this.buffer = new PushbackReader(new FileReader(fileName));
 		riga = 1;
-		// inizializzare campi che non hanno inizializzazione
 	}
+	//costruttore che crea la PushbackReader di nome buffer
 
-	public Token nextToken()  {
-			Token t = nextToken;
-			nextToken = null;
-			return t;
-		}
 
+	public Token nextToken() throws IOException {
 
 		// nextChar contiene il prossimo carattere dell'input (non consumato).
-		char nextChar; //Catturate l'eccezione IOException e ritornate una LexicalException che la contiene
+		char nextChar = peekChar(); //Catturate l'eccezione IOException e
+		// ritornate una LexicalException che la contiene
 
-	{
-		try {
-			nextChar = peekChar();
-		} catch (IOException e) {
-			throw new IOException(e);
-		}
-	}
-
-	// Avanza nel buffer leggendo i carattere in skipChars
+		// Avanza nel buffer leggendo i carattere in skipChars
 		// incrementando riga se leggi '\n'.
+
 		// Se raggiungi la fine del file ritorna il Token EOF
 
 
-
 		// Se nextChar e' in letters
-		// return scanId()
-		// che legge tutte le lettere minuscole e ritorna un Token ID o
-		// il Token associato Parola Chiave (per generare i Token per le
-		// parole chiave usate l'HaskMap di corrispondenza
+			// return scanId()
+				// che legge tutte le lettere minuscole e ritorna un Token ID o
+				// il Token associato Parola Chiave (per generare i Token per le
+				// parole chiave usate l'HaskMap di corrispondenza
 
-		// Se nextChar e' o in operators oppure 
-		// ritorna il Token associato con l'operatore o il delimitatore
+		// Se nextChar e' o in operators oppure
+			// ritorna il Token associato con l'operatore o il delimitatore
 
 		// Se nextChar e' in numbers
-		// return scanNumber()
-		// che legge sia un intero che un float e ritorna il Token INUM o FNUM
-		// i caratteri che leggete devono essere accumulati in una stringa
-		// che verra' assegnata al campo valore del Token
+			// return scanNumber()
+				// che legge sia un intero che un float e ritorna il Token INUM o FNUM
+				// i caratteri che leggete devono essere accumulati in una stringa
+				// che verra' assegnata al campo valore del Token
 
 		// Altrimenti il carattere NON E' UN CARATTERE LEGALE sollevate una
 		// eccezione lessicale dicendo la riga e il carattere che la hanno
-		// provocata. 
+		// provocata.
 
+
+	}
 
 	// private Token scanNumber()
 

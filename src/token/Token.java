@@ -7,8 +7,8 @@ public class Token {
 	private String val;	//solo per identificatori, numeri, keyword, operatori
 
 	public Token(TokenType tipo, int riga, String val) {
-		this.riga = riga;
 		this.tipo = tipo;
+		this.riga = riga;
 		this.val = val;
 	}
 	
