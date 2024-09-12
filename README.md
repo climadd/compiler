@@ -1,5 +1,7 @@
 # AcDc Compiler
-The compilation consists of two phases: **Lexical Analysis** and **Syntactic Analysis**, which builds an **Abstract Syntax Tree** (AST), followed by **Semantic Analysis** (type checking) and **Code Generation** for Dc, both based on the AST.
+The compilation consists of two phases: 
+    **Lexical Analysis** and **Syntactic Analysis**, which builds an **Abstract Syntax Tree** (AST);
+    followed by **Semantic Analysis** (type checking) and **Code Generation** for Dc, both based on the AST.
 
 ## Source Language: Ac
 * 2 Data types: int and float.
