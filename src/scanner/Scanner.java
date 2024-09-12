@@ -37,7 +37,7 @@ public class Scanner {
 	public Token nextToken()  {
 
 		// nextChar contiene il prossimo carattere dell'input (non consumato).
-		char nextChar = peekChar();//Catturate l'eccezione IOException e
+//		char nextChar = peekChar();//Catturate l'eccezione IOException e
 		       // ritornate una LexicalException che la contiene
 
 		// Avanza nel buffer leggendo i carattere in skipChars

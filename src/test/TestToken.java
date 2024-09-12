@@ -10,9 +10,9 @@ import token.TokenType;
 class TestToken {
 
 	@Test
-	void test() {
+	public void test() {
 		
-		
+	fail("not yet implemented");
 		
 	}
 
