@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
+import java.util.HashSet;
+
+import exceptions.LexicalException;
 
 import token.*;
 
@@ -13,7 +16,8 @@ public class Scanner {
 	private PushbackReader buffer;
 	private String log;
 
-	// skpChars: insieme caratteri di skip (include EOF) e inizializzazione
+	HashSet skpChars = new HashSet();	// skpChars: insieme caratteri di skip (include EOF) e inizializzazione
+
 	// letters: insieme lettere e inizializzazione
 	// digits: cifre e inizializzazione
 
@@ -33,7 +37,7 @@ public class Scanner {
 	public Token nextToken()  {
 
 		// nextChar contiene il prossimo carattere dell'input (non consumato).
-		char nextChar = peekChar(); //Catturate l'eccezione IOException e 
+		char nextChar = peekChar();//Catturate l'eccezione IOException e
 		       // ritornate una LexicalException che la contiene
 
 		// Avanza nel buffer leggendo i carattere in skipChars
@@ -60,7 +64,7 @@ public class Scanner {
 		// eccezione lessicale dicendo la riga e il carattere che la hanno
 		// provocata. 
 
-
+		throw new RuntimeException("TODO da implementare"); //sostituzione al return
 	}
 
 	// private Token scanNumber()
