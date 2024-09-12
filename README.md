@@ -1,13 +1,13 @@
 # AcDc Compiler
-The compilation consists of two phases: LEXICAL and SYNTACTIC ANALYSIS, which builds an ABSTRACT SYNTX TREE (AST), followed by SEMANTIC ANALYSIS (type checking) and CODE GENERATION for dc, both based on the AST.
+The compilation consists of two phases: **Lexical Analysis** and **Syntactic Analysis**, which builds an **Abstract Syntax Tree** (AST), followed by **Semantic Analysis** (type checking) and **Code Generation** for Dc, both based on the AST.
 
 ## Source Language: Ac
 * 2 Data types: int and float.
 * Integer literals: Sequence of digits. If starting with 0, no other digits can follow.
 * Floating-point literals: Sequence of digits followed by a "." and up to 5 digits.
 * Variables: Only lowercase English letters (a-z), must be declared before use.
-* Declaration:"int" or "float" followed by a variable, with optional initialization.
-* Expressions:Can be literals (int or float), variables, or binary expressions (+, -, *, /).Binary operands must be of the same type.int can automatically convert to float, no other conversions allowed.
+* Declaration: "int" or "float" followed by a variable, with optional initialization.
+* Expressions:Can be literals (int or float), variables, or binary expressions (+, -, *, /). Binary operands must be of the same type. int can automatically convert to float, no other conversions allowed.
 * Instructions: Assignment and Print
 
 ## Target Language: Dc
