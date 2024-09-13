@@ -4,9 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-
-import exceptions.LexicalException;
 
 import token.*;
 
@@ -15,29 +15,66 @@ public class Scanner {
 	private int riga;
 	private PushbackReader buffer;
 	private String log;
-
-	HashSet skpChars = new HashSet();	// skpChars: insieme caratteri di skip (include EOF) e inizializzazione
-
+	
+	// skpChars: insieme caratteri di skip (include EOF) e inizializzazione
+	private HashSet<Character> skpChars;	
 	// letters: insieme lettere e inizializzazione
+	private HashSet<Character> letters;
 	// digits: cifre e inizializzazione
-
-	// char_type_Map: mapping fra caratteri '+', '-', '*', '/', ';', '=', ';' e il
-	// TokenType corrispondente
-
-	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il
-	// TokenType  corrispondente
+	private HashSet<Character> numbers;
+	// char_type_Map: mapping fra caratteri '+', '-', '*', '/', '=', ';' e il TokenType corrispondente
+	private HashMap<Character, TokenType> charTypeMap;
+	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il TokenType  corrispondente
+	private HashMap<String, TokenType> keyWordsMap;
+	
 
 	public Scanner(String fileName) throws FileNotFoundException {
 
 		this.buffer = new PushbackReader(new FileReader(fileName));
 		riga = 1;
-		// inizializzare campi che non hanno inizializzazione
+		
+		this.skpChars = new HashSet<Character>();
+		skpChars.add(' ');
+		skpChars.add('\n');
+		skpChars.add('\t');
+		skpChars.add('\r');
+		skpChars.add(EOF);
+		
+		this.letters = new HashSet<Character>(
+			    Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+				);
+				
+		this.numbers = new HashSet<Character>(
+				Arrays.asList('1', '2', '3', '4', '5', '6', '7', '8', '9')
+				);
+		
+		this.charTypeMap = new HashMap<Character, TokenType>();
+		charTypeMap.put('+', TokenType.PLUS);
+		charTypeMap.put('-', TokenType.MINUS);
+		charTypeMap.put('*', TokenType.TIMES);
+		charTypeMap.put('/', TokenType.DIVIDE);
+		charTypeMap.put(';', TokenType.SEMI);
+		charTypeMap.put('/', TokenType.OP_ASSIGN);
+
+		this.keyWordsMap = new HashMap<String, TokenType>();
+		keyWordsMap.put("print", TokenType.PRINT);
+		keyWordsMap.put("int", TokenType.INT);
+		keyWordsMap.put("float", TokenType.FLOAT);
+		
 	}
 
-	public Token nextToken()  {
+	public Token nextToken() throws LexicalException  {
 
 		// nextChar contiene il prossimo carattere dell'input (non consumato).
-//		char nextChar = peekChar();//Catturate l'eccezione IOException e
+		try {
+			
+			char nextChar = peekChar();
+			
+		} catch (IOException e) {
+			throw new LexicalException("Exception!");
+		}
+		
+		//Catturate l'eccezione IOException e
 		       // ritornate una LexicalException che la contiene
 
 		// Avanza nel buffer leggendo i carattere in skipChars
