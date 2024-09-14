@@ -62,21 +62,33 @@ public class Scanner {
 		keyWordsMap.put("float", TokenType.FLOAT);
 		
 	}
-
-	public Token nextToken() throws LexicalException  {
-
-		// nextChar contiene il prossimo carattere dell'input (non consumato).
-		try {
+	
+	//METODO DEL GRAFO A STATI DELLE SLIDES
+	public Token nextToken() throws LexicalException  {		//ritorna (consumando) il prossimo token sullo stream 
+		Token token;
+		try {	
 			
-			char nextChar = peekChar();
+			char nextChar = peekChar(); 	// nextChar contiene il prossimo carattere dell'input (non consumato).
+			while(skpChars.contains(nextChar)) {
+				if(nextChar == EOF) {
+					token = new Token(TokenType.EOF, riga);
+					return token;
+				}
+				else if(nextChar == '\n') {
+					riga++;
+				}
+			}
+			while
+			
+			
 			
 		} catch (IOException e) {
 			throw new LexicalException("Exception!");
 		}
-		
 		//Catturate l'eccezione IOException e
 		       // ritornate una LexicalException che la contiene
-
+		
+			
 		// Avanza nel buffer leggendo i carattere in skipChars
 		// incrementando riga se leggi '\n'.
 		// Se raggiungi la fine del file ritorna il Token EOF
@@ -104,9 +116,15 @@ public class Scanner {
 		throw new RuntimeException("TODO da implementare"); //sostituzione al return
 	}
 
-	// private Token scanNumber()
+	 private Token scanNumber() {
+		 
+		 throw new RuntimeException("TODO da implementare");
+	 }
 
-	// private Token scanId()
+	 private Token scanId() {
+		 
+		 throw new RuntimeException("TODO da implementare");
+	 }
 
 	private char readChar() throws IOException {
 		return ((char) this.buffer.read());

@@ -17,10 +17,24 @@ public class Token {
 	}
 
     // Getters per i campi
+	public int getRiga() {
+		return this.riga;
+	}
+	
+	public TokenType getTipo() {
+		return this.tipo;
+	}
+	
+	public String getVal() {
+		return this.val;
+	}
+	
     
 	public String toString() {
-		//TODO: implementa metodo
-		return null;
+		if(this.val != null)
+			return("<" + tipo + ", r:" + riga + ", " + val + ">");
+		else 
+			return ("<" + tipo + ", r:" + riga + ">");
 	}
 
 
