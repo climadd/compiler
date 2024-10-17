@@ -14,7 +14,6 @@ public class Scanner {
 	final char EOF = (char) -1; 
 	private int riga;
 	private PushbackReader buffer;
-	//	private String log;	//non capisco bene a cosa serva
 
 	// skpChars: insieme caratteri di skip (include EOF) e inizializzazione
 	private HashSet<Character> skipChars;
@@ -63,7 +62,9 @@ public class Scanner {
 
 	}
 
-	//METODO DEL GRAFO A STATI DELLE SLIDES
+	// NEXT TOKEN
+	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
+		
 	public Token nextToken() throws LexicalException  {	//ritorna (consumando) il prossimo token sullo stream 
 		Token token;
 		try {	
@@ -84,7 +85,7 @@ public class Scanner {
 			if(letters.contains(nextChar)) {
 				return scanId(nextChar);
 			}
-			// blocco numeri - scanNumber()
+			//blocco numeri - scanNumber()
 			else if(numbers.contains(nextChar)) {
 				return scanNumber(nextChar);
 			}			
@@ -118,6 +119,10 @@ public class Scanner {
 		}
 	}
 
+	
+	
+	
+	//SCAN NUMBER
 	// che legge sia un intero che un float e ritorna il Token INUM o FNUM
 	// i caratteri che leggete devono essere accumulati in una stringa
 	// che verra' assegnata al campo valore del Token
@@ -147,6 +152,10 @@ public class Scanner {
 		return token;
 	}
 
+	
+	
+	
+	//SCANID
 	// che legge tutte le lettere minuscole e ritorna un Token ID o
 	// il Token associato Parola Chiave (per generare i Token per le
 	// parole chiave usate l'HaskMap di corrispondenza
@@ -168,10 +177,33 @@ public class Scanner {
 		}
 	}
 
+	//scan operator/delimit
+	private Token scanOperator() {
+		
+		throw new RuntimeException();
+	}
+	
+	private Token scanDelimiter() {
+		
+		throw new RuntimeException();	
+	}
+	
+	
+	
+	/**
+	 *  reads a character in the buffer by consuming it
+	 * @return The next character in the buffer.
+	 * @throws IOException
+	 */
 	private char readChar() throws IOException {
 		return ((char) this.buffer.read());
 	}
 
+	/**
+	 *  reads a character in the buffer without consuming it
+	 * @return The next character in the buffer.
+	 * @throws IOException
+	 */
 	private char peekChar() throws IOException {
 		char c = (char) buffer.read();
 		buffer.unread(c);
