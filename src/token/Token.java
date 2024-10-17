@@ -2,8 +2,8 @@ package token;
 
 public class Token {
 
-	private int riga;	//riga del codice in cui si trova il token
 	private TokenType tipo;	//enum
+	private int riga;	//riga del codice in cui si trova il token
 	private String val;	// per identificatori e numeri contiene la string matchata
 	
 	public Token(TokenType tipo, int riga, String val) {
@@ -17,7 +17,7 @@ public class Token {
 	}
 
     // Getters per i campi
-	public int getRiga() {
+	public int getLine() {
 		return this.riga;
 	}
 	
