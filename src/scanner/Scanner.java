@@ -26,7 +26,7 @@ public class Scanner {
 	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il TokenType  corrispondente
 	private HashMap<String, TokenType> keyWordsMap;
 
-	
+
 	//costruttore
 	public Scanner(String fileName) throws FileNotFoundException {
 
@@ -63,9 +63,10 @@ public class Scanner {
 
 	}
 
+
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
-		
+
 	public Token nextToken() throws LexicalException  {	//ritorna (consumando) il prossimo token sullo stream 
 		Token token;
 		try {	
@@ -73,14 +74,14 @@ public class Scanner {
 
 			//blocco dello skipchar
 			while(skipChars.contains(nextChar)) {
-				if(nextChar == '\n') {
-					line++;
-				}
-				else if(nextChar == EOF) {
+				if(nextChar == EOF) {
 					token = new Token(TokenType.EOF, line);
 					return token;
 				}
-				readChar();
+				else if(nextChar == '\n') {
+					line++;
+				}
+				nextChar = readChar();
 			}		
 			//blocco lettere - scanId()
 			if(letters.contains(nextChar)) {
@@ -103,9 +104,8 @@ public class Scanner {
 		}
 	}
 
-	
-	
-	
+
+
 	//SCAN NUMBER
 	// che legge sia un intero che un float e ritorna il Token INUM o FNUM
 	// i caratteri che leggete devono essere accumulati in una stringa
@@ -136,9 +136,9 @@ public class Scanner {
 		return token;
 	}
 
-	
-	
-	
+
+
+
 	//SCANID
 	// che legge tutte le lettere minuscole e ritorna un Token ID o
 	// il Token associato Parola Chiave (per generare i Token per le
@@ -162,10 +162,12 @@ public class Scanner {
 		}
 	}
 
-	
+
+
+
 	//SCAN OPERATOR
 	//legge i caratteri che fanno parte di operatori e delimitatori
-	
+
 	private Token scanOperator(char nextChar) throws IOException {
 		Token token;
 		if (nextChar == '=' || nextChar == ';') {
@@ -186,11 +188,11 @@ public class Scanner {
 			}
 			return token;
 		}	
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 *  reads a character in the buffer by consuming it
 	 * @return The next character in the buffer.

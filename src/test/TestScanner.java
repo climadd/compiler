@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import scanner.Scanner;
 import scanner.LexicalException;
@@ -41,8 +42,7 @@ class TestScanner {
 			testIdKeyWords = new Scanner(path + "testIdKeyWords.txt");
 			testINT = new Scanner(path + "testINT.txt");
 			testKeywords = new Scanner(path + "testKeywords.txt");
-			testOperators = new Scanner(path + "testOperators.txt");
-			
+			testOperators = new Scanner(path + "testOperators.txt");	
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -50,10 +50,18 @@ class TestScanner {
 	}
 
 	@Test
-	public void testEOF() throws LexicalException{
+	@Timeout(3)
+	public void testEOF() throws LexicalException{	
 		
-		String nextToken = testEOF.nextToken().toString();
-		assertEquals("<EOF,r:4>", nextToken);
+		//nextToken
+		Token output = testEOF.nextToken();
+		assertEquals(output.getType(), TokenType.EOF);
+		assertEquals(output.getLine(), 4);
+		
+		//toString()
+		String nextToken = testEOF.nextToken().toString();	
+		assertEquals("<EOF, r:4>", nextToken);
+		
 	}
 
 //	@Test
