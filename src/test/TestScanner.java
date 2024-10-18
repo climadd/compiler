@@ -64,11 +64,13 @@ class TestScanner {
 		
 	}
 
-//	@Test
-//	public void testFLOAT(){
-//
-//	}
-//
+	@Test
+	public void testFLOAT() throws LexicalException{
+
+		String nextToken = testFLOAT.nextToken().toString();
+		assertEquals("<FLOAT, r:1, 98.8095>", nextToken);
+	}
+
 //	@Test
 //	public void testReadChar() {
 //		//TODO: LATER ALLIGATER
