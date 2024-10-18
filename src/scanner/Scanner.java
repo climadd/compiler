@@ -26,7 +26,8 @@ public class Scanner {
 	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il TokenType  corrispondente
 	private HashMap<String, TokenType> keyWordsMap;
 
-
+	
+	//costruttore
 	public Scanner(String fileName) throws FileNotFoundException {
 
 		this.buffer = new PushbackReader(new FileReader(fileName));
@@ -89,7 +90,7 @@ public class Scanner {
 			else if(numbers.contains(nextChar)) {
 				return scanNumber(nextChar);
 			}			
-			//blocco parole chiave - scan
+			//blocco parole chiave - scanOperatior()
 			else if(charTypeMap.containsKey(nextChar)) {
 				return scanOperator(nextChar);
 			}

@@ -4,16 +4,16 @@ public class Token {
 
 	private TokenType tipo;	//enum
 	private int riga;	//riga del codice in cui si trova il token
-	private String val;	// per identificatori e numeri contiene la string matchata
+	private String val;	// OPZIONALE: per identificatori e numeri contiene la string matchata
 	
-	public Token(TokenType tipo, int riga, String val) {
-		this.tipo = tipo;
-		this.riga = riga;
-		this.val = val;
+	public Token(TokenType type, int line, String value) {
+		this.tipo = type;
+		this.riga = line;
+		this.val = value;
 	}
 	
-	public Token(TokenType tipo, int riga) {
-		this(tipo, riga, null);
+	public Token(TokenType type, int line) {
+		this(type, line, null);
 	}
 
     // Getters per i campi
@@ -21,11 +21,11 @@ public class Token {
 		return this.riga;
 	}
 	
-	public TokenType getTipo() {
+	public TokenType getType() {
 		return this.tipo;
 	}
 	
-	public String getVal() {
+	public String getValue() {
 		return this.val;
 	}
 	
