@@ -192,7 +192,6 @@ public class Scanner {
 	}
 
 
-
 	/**
 	 *  reads a character in the buffer by consuming it
 	 * @return The next character in the buffer.

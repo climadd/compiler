@@ -65,6 +65,25 @@ class TestScanner {
 	}
 
 	@Test
+	public void testOperators() throws LexicalException {
+		String nextString = testOperators.nextToken().toString();
+		assertEquals("<PLUS, r:1>",nextString);
+		
+		
+		// TODO: CONTINUA DA OPERATORS CHE FUNZIONA----------------------
+	}
+	
+	@Test
+	public void testINT() throws LexicalException{
+
+		String nextString = testINT.nextToken().toString();
+		assertEquals("<INT, r:2, 698>", nextString);
+		
+		nextString = testINT.nextToken().toString();
+		assertEquals("<INT, r:4, 560099", nextString);
+	}
+	
+	@Test
 	public void testFLOAT() throws LexicalException{
 
 		String nextToken = testFLOAT.nextToken().toString();
