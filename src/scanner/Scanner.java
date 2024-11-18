@@ -63,41 +63,53 @@ public class Scanner {
 
 	}
 
-
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
 
 	public Token nextToken() throws LexicalException  {	//ritorna (consumando) il prossimo token sullo stream 
-		Token token;
 		try {	
 			char nextChar = peekChar(); 	// nextChar contiene il prossimo carattere dell'input (non consumato).
 
-			//blocco dello skipchar
+			//blocco dello skipChar
 			while(skipChars.contains(nextChar)) {
+				//debug
+				System.out.println("entrando in skipchar");
+				
 				if(nextChar == EOF) {
-					token = new Token(TokenType.EOF, line);
-					return token;
+					return scanEOF();
 				}
-				else if(nextChar == '\n') {	
-					line++;
-					nextChar = readChar();
-				}
-				else {
-					nextChar = readChar();
-				}
+
+				if(nextChar == '\n') {		
+					this.line++;
+					System.out.println(" è stato appena alzato line a: " + line);
+				}			
+				nextChar = readChar();	
 			}		
 
-			//blocco parole chiave - scanOperatior()
+			//blocco parole chiave - scanOperator()
 			if(charTypeMap.containsKey(nextChar)) {
+				
+				//debug
+				System.out.println("entrando in scan Operator");
+
 				return scanOperator(nextChar);
 			}
 
 			//blocco lettere - scanId()
 			else if(letters.contains(nextChar)) {
+				
+				//debug
+				System.out.println("entrando in scanID");
+
+				
 				return scanId(nextChar);
 			}
 			//blocco numeri - scanNumber()
 			else if(numbers.contains(nextChar)) {
+				
+				//debug
+				System.out.println("entrando in scan Number");
+				
 				return scanNumber(nextChar);
 			}			
 
@@ -109,8 +121,6 @@ public class Scanner {
 			throw new LexicalException("Exception!");
 		}
 	}
-
-
 
 	//SCAN NUMBER
 	// che legge sia un intero che un float e ritorna il Token INUM o FNUM
@@ -184,7 +194,7 @@ public class Scanner {
 		}
 		//check per compositi
 		else {
-			StringBuilder multiCharOp = new StringBuilder();
+			StringBuilder multiCharOp = new StringBuilder();			
 			multiCharOp.append(nextChar); //nella stringa metto il primo carattere
 
 			char predict = peekChar(); // check secondo carattere
@@ -200,6 +210,12 @@ public class Scanner {
 		}
 	}
 
+	//SCAN EOF
+	private Token scanEOF() {
+		Token token;
+		token = new Token(TokenType.EOF, line);
+		return token;
+	}
 
 	/**
 	 *  reads a character in the buffer by consuming it
