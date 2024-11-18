@@ -78,23 +78,29 @@ public class Scanner {
 					token = new Token(TokenType.EOF, line);
 					return token;
 				}
-				else if(nextChar == '\n') {
+				else if(nextChar == '\n') {	
 					line++;
+					nextChar = readChar();
 				}
-				nextChar = readChar();
+				else {
+					nextChar = readChar();
+				}
 			}		
+
+			//blocco parole chiave - scanOperatior()
+			if(charTypeMap.containsKey(nextChar)) {
+				return scanOperator(nextChar);
+			}
+
 			//blocco lettere - scanId()
-			if(letters.contains(nextChar)) {
+			else if(letters.contains(nextChar)) {
 				return scanId(nextChar);
 			}
 			//blocco numeri - scanNumber()
 			else if(numbers.contains(nextChar)) {
 				return scanNumber(nextChar);
 			}			
-			//blocco parole chiave - scanOperatior()
-			else if(charTypeMap.containsKey(nextChar)) {
-				return scanOperator(nextChar);
-			}
+
 
 			else {
 				throw new LexicalException("Invalid Character! '" + nextChar + "' at line " + line);
@@ -170,25 +176,28 @@ public class Scanner {
 
 	private Token scanOperator(char nextChar) throws IOException {
 		Token token;
+		//check per caratteri singoli
 		if (nextChar == '=' || nextChar == ';') {
-			token = new Token(charTypeMap.get(readChar()), line);
+			token = new Token(charTypeMap.get(nextChar), line);
+			readChar();
 			return token;
 		}
+		//check per compositi
 		else {
-			String multiCharOp = "";
-			multiCharOp += readChar();
-			char predict = peekChar();	//variabile di sostegno per l'assegnamento con operatore
+			StringBuilder multiCharOp = new StringBuilder();
+			multiCharOp.append(nextChar); //nella stringa metto il primo carattere
+
+			char predict = peekChar(); // check secondo carattere
 			if (predict == '=') {
-				multiCharOp += predict;
-				token = new Token (TokenType.OP_ASSIGN, line, multiCharOp);
+				multiCharOp.append(readChar());
+				token = new Token(TokenType.OP_ASSIGN, line, multiCharOp.toString());
+			} else {
+				// se il carattere non era composito
+				token = new Token(charTypeMap.get(nextChar), line);
 				readChar();
 			}
-			else {
-				token = new Token (charTypeMap.get(nextChar), line);
-			}
 			return token;
-		}	
-
+		}
 	}
 
 

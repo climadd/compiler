@@ -69,6 +69,24 @@ class TestScanner {
 		String nextString = testOperators.nextToken().toString();
 		assertEquals("<PLUS, r:1>",nextString);
 		
+		nextString = testOperators.nextToken().toString();
+		assertEquals("<OP_ASSIGN, r:1, /=>", nextString);
+		
+		nextString = testOperators.nextToken().toString();
+		assertEquals("<MINUS, r:2>", nextString);
+		
+		nextString = testOperators.nextToken().toString();
+		assertEquals("<TIMES, r:2>", nextString);
+		
+		nextString = testOperators.nextToken().toString();
+		assertEquals("<DIVIDE, r:3>", nextString);
+		
+		nextString = testOperators.nextToken().toString();
+		assertEquals("<OP_ASSIGN, r:5, +=>", nextString);
+		
+		nextString = testOperators.nextToken().toString();
+		assertEquals("<OP_ASSIGN, r:6>", nextString);
+		
 		
 		// TODO: CONTINUA DA OPERATORS CHE FUNZIONA----------------------
 	}
