@@ -88,26 +88,31 @@ class TestScanner {
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:5, +=>", nextString);
-		System.out.println(nextString);
+		System.out.print(nextString);
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:6>", nextString);
+		System.out.print(nextString);
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:6, -=>", nextString);
+		System.out.println(nextString);
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<MINUS, r:8>", nextString);
+		System.out.print(nextString);
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:8>", nextString);
+		System.out.print(nextString);
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:8, *=>", nextString);
+		System.out.print(nextString);
 		
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<SEMI, r:10>", nextString);
-		
+		System.out.print(nextString);
 	}
 	
 	@Test

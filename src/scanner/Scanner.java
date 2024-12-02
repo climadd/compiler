@@ -22,7 +22,7 @@ public class Scanner {
 	// digits: cifre e inizializzazione
 	private HashSet<Character> numbers;
 	// char_type_Map: mapping fra caratteri '+', '-', '*', '/', '=', ';' e il TokenType corrispondente
-	private HashMap<Character, TokenType> charTypeMap;
+	private HashMap<Character, TokenType> operatorMap;
 	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il TokenType  corrispondente
 	private HashMap<String, TokenType> keyWordsMap;
 
@@ -48,13 +48,13 @@ public class Scanner {
 				Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 				);
 
-		this.charTypeMap = new HashMap<Character, TokenType>();
-		charTypeMap.put('+', TokenType.PLUS);
-		charTypeMap.put('-', TokenType.MINUS);
-		charTypeMap.put('*', TokenType.TIMES);
-		charTypeMap.put('/', TokenType.DIVIDE);
-		charTypeMap.put(';', TokenType.SEMI);
-		charTypeMap.put('=', TokenType.OP_ASSIGN);
+		this.operatorMap = new HashMap<Character, TokenType>();
+		operatorMap.put('+', TokenType.PLUS);
+		operatorMap.put('-', TokenType.MINUS);
+		operatorMap.put('*', TokenType.TIMES);
+		operatorMap.put('/', TokenType.DIVIDE);
+		operatorMap.put(';', TokenType.SEMI);
+		operatorMap.put('=', TokenType.OP_ASSIGN);
 
 		this.keyWordsMap = new HashMap<String, TokenType>();
 		keyWordsMap.put("print", TokenType.PRINT);
@@ -72,8 +72,6 @@ public class Scanner {
 
 			//blocco dello skipChar
 			while(skipChars.contains(nextChar)) {
-				//debug
-				System.out.println("entrando in skipchar");
 				
 				if(nextChar == EOF) {
 					return scanEOF();
@@ -81,35 +79,23 @@ public class Scanner {
 
 				if(nextChar == '\n') {		
 					this.line++;
-					System.out.println(" è stato appena alzato line a: " + line);
 				}			
-				nextChar = readChar();	
+				readChar();	
+				nextChar = peekChar();
 			}		
 
-			//blocco parole chiave - scanOperator()
-			if(charTypeMap.containsKey(nextChar)) {
-				
-				//debug
-				System.out.println("entrando in scan Operator");
-
+			//blocco operatori - scanOperator()
+			if(operatorMap.containsKey(nextChar)) {
 				return scanOperator(nextChar);
 			}
 
 			//blocco lettere - scanId()
 			else if(letters.contains(nextChar)) {
-				
-				//debug
-				System.out.println("entrando in scanID");
-
-				
 				return scanId(nextChar);
 			}
+			
 			//blocco numeri - scanNumber()
 			else if(numbers.contains(nextChar)) {
-				
-				//debug
-				System.out.println("entrando in scan Number");
-				
 				return scanNumber(nextChar);
 			}			
 
@@ -188,26 +174,33 @@ public class Scanner {
 		Token token;
 		//check per caratteri singoli
 		if (nextChar == '=' || nextChar == ';') {
-			token = new Token(charTypeMap.get(nextChar), line);
-			readChar();
+			token = new Token(operatorMap.get(nextChar), line);
+			nextChar = readChar();	//valore non cambia dal precedente (peeked), ma avanzo il buffer
 			return token;
 		}
-		//check per compositi
+		//check se compositi
 		else {
-			StringBuilder multiCharOp = new StringBuilder();			
-			multiCharOp.append(nextChar); //nella stringa metto il primo carattere
-
-			char predict = peekChar(); // check secondo carattere
-			if (predict == '=') {
-				multiCharOp.append(readChar());
-				token = new Token(TokenType.OP_ASSIGN, line, multiCharOp.toString());
-			} else {
-				// se il carattere non era composito
-				token = new Token(charTypeMap.get(nextChar), line);
-				readChar();
+			StringBuilder multiCharOp = new StringBuilder();
+			nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
+			multiCharOp.append(nextChar); 
+		
+			if(!operatorMap.containsKey(peekChar())) {
+				token = new Token(operatorMap.get(nextChar), line);
 			}
-			return token;
+			
+			else {
+				if(peekChar() == '=') {
+					nextChar = readChar();
+					multiCharOp.append(nextChar);
+					token = new Token(TokenType.OP_ASSIGN, line, multiCharOp.toString());
+				}
+				else {
+					// se il carattere non era composito
+					token = new Token(operatorMap.get(nextChar), line);
+				}
+			}
 		}
+		return token;
 	}
 
 	//SCAN EOF
