@@ -68,11 +68,11 @@ public class Scanner {
 
 	public Token nextToken() throws LexicalException  {	//ritorna (consumando) il prossimo token sullo stream 
 		try {	
-			char nextChar = peekChar(); 	// nextChar contiene il prossimo carattere dell'input (non consumato).
+			char nextChar = peekChar();  //LA READ LA EFFETTUERò NEI METODI, OGNUNO LA GESTISCE IN AUTONOMIA
 
 			//blocco dello skipChar
 			while(skipChars.contains(nextChar)) {
-				
+
 				if(nextChar == EOF) {
 					return scanEOF();
 				}
@@ -93,7 +93,7 @@ public class Scanner {
 			else if(letters.contains(nextChar)) {
 				return scanId(nextChar);
 			}
-			
+
 			//blocco numeri - scanNumber()
 			else if(numbers.contains(nextChar)) {
 				return scanNumber(nextChar);
@@ -108,28 +108,37 @@ public class Scanner {
 		}
 	}
 
-	//SCAN NUMBER
-	// che legge sia un intero che un float e ritorna il Token INUM o FNUM
-	// i caratteri che leggete devono essere accumulati in una stringa
-	// che verra' assegnata al campo valore del Token
+	//SCAN NUMBER	
+//	ERRORE STA NEL MODO DI AGGIORNARE LE VARIABILI DI CICLO
+	
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
-		String numString= "";
+		String numString = "";
 		Token token;
-		boolean floatFlag = false;
-
+		nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
+		
+		boolean decimalFlag = false;
+		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola  
+		
 		while(numbers.contains(nextChar) || nextChar == '.') {
+			//gestione decimal point
 			if(nextChar == '.') {
-				if (floatFlag) {
+				if (decimalFlag) {
 					throw new LexicalException("Invalid Number! multiple '.' at line " + line);
 				}
-				floatFlag = true;
+				decimalFlag = true;
 			}
-
+			
+			//check su cifra piu significativa = 0
+			char predict = peekChar(); //variabile di controllo
+			if (!(numString.length() == 0 & nextChar == '0' & predict != '.')) {
+				System.out.println("Reading character: '" + nextChar + "'");
+				numString += nextChar;
+			}			
 			nextChar = readChar();
-			numString += nextChar;		 
+			predict = peekChar();
 		}
 
-		if(!floatFlag) { 
+		if(!decimalFlag) { 
 			token = new Token(TokenType.INT, line, numString);
 		}
 		else {
@@ -167,43 +176,39 @@ public class Scanner {
 
 
 
-	//SCAN OPERATOR
+	//SCAN OPERATOR		FINITA
 	//legge i caratteri che fanno parte di operatori e delimitatori
 
 	private Token scanOperator(char nextChar) throws IOException {
 		Token token;
-		//check per caratteri singoli
+
+		//check per caratteri che sono necessariamente singoli
 		if (nextChar == '=' || nextChar == ';') {
 			token = new Token(operatorMap.get(nextChar), line);
 			nextChar = readChar();	//valore non cambia dal precedente (peeked), ma avanzo il buffer
 			return token;
 		}
-		//check se compositi
 		else {
 			StringBuilder multiCharOp = new StringBuilder();
 			nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
-			multiCharOp.append(nextChar); 
-		
-			if(!operatorMap.containsKey(peekChar())) {
+			multiCharOp.append(nextChar);
+
+			//check se compositi
+			if(peekChar() == '=') {
+				nextChar = readChar();
+				multiCharOp.append(nextChar);
+				token = new Token(TokenType.OP_ASSIGN, line, multiCharOp.toString());
+			}
+			else {
+				// se il carattere non era composito
 				token = new Token(operatorMap.get(nextChar), line);
 			}
-			
-			else {
-				if(peekChar() == '=') {
-					nextChar = readChar();
-					multiCharOp.append(nextChar);
-					token = new Token(TokenType.OP_ASSIGN, line, multiCharOp.toString());
-				}
-				else {
-					// se il carattere non era composito
-					token = new Token(operatorMap.get(nextChar), line);
-				}
-			}
+
 		}
 		return token;
 	}
 
-	//SCAN EOF
+	//SCAN EOF		FINITA
 	private Token scanEOF() {
 		Token token;
 		token = new Token(TokenType.EOF, line);

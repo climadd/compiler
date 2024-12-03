@@ -34,7 +34,7 @@ class TestScanner {
 
 		try {
 			path = "./src/test/data/testScanner/";
-			
+
 			testEOF = new Scanner(path + "testEOF.txt");
 			testFLOAT = new Scanner(path + "testFLOAT.txt");
 			testGenerale = new Scanner(path + "testGenerale.txt");
@@ -52,116 +52,110 @@ class TestScanner {
 	@Test
 	@Timeout(3)
 	public void testEOF() throws LexicalException{	
-		
+
 		//nextToken
 		Token output = testEOF.nextToken();
 		assertEquals(output.getType(), TokenType.EOF);
 		assertEquals(output.getLine(), 4);
-		
+
 		//toString()
 		String nextToken = testEOF.nextToken().toString();	
 		assertEquals("<EOF, r:4>", nextToken);
-		
+
 	}
 
 	@Test
 	public void testOperators() throws LexicalException {
+
 		String nextString = testOperators.nextToken().toString();
 		assertEquals("<PLUS, r:1>",nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:1, /=>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<MINUS, r:2>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<TIMES, r:2>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<DIVIDE, r:3>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:5, +=>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:6>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:6, -=>", nextString);
-		System.out.println(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<MINUS, r:8>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:8>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:8, *=>", nextString);
-		System.out.print(nextString);
-		
+
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<SEMI, r:10>", nextString);
-		System.out.print(nextString);
 	}
-	
+
 	@Test
 	public void testINT() throws LexicalException{
 
-//		String nextString = testINT.nextToken().toString();
-//		assertEquals("<INT, r:2, 698>", nextString);
-//		
-//		nextString = testINT.nextToken().toString();
-//		assertEquals("<INT, r:4, 560099", nextString);
-	}
-	
-	@Test
-	public void testFLOAT() throws LexicalException{
-//
-//		String nextToken = testFLOAT.nextToken().toString();
-//		assertEquals("<FLOAT, r:1, 98.8095>", nextToken);
+		
+				String nextString = testINT.nextToken().toString();
+				assertEquals("<INT, r:2, 698>", nextString);
+				
+				nextString = testINT.nextToken().toString();
+				assertEquals("<INT, r:4, 560099", nextString);
+				
+				nextString = testINT.nextToken().toString();
+				assertEquals("<INT, r:5, 1234>", nextString);
+		
 	}
 
-//	@Test
-//	public void testReadChar() {
-//		//TODO: LATER ALLIGATER
-//	}
-//
-//	@Test
-//	public void testPeekChar() {
-//		//TODO: LATER
-//	}
-//
-//	@Test
-//	public void testScanNumber() {
-//
-//	}
-//
-//	@Test
-//	public void testScanId(){
-//
-//	}
-//
-//	@Test
-//	public void testScanOperator() {
-//
-//	}
-//
-//
-//
-//	@Test
-//	public void testNextToken() {
-//
-//	}
+	@Test
+	public void testFLOAT() throws LexicalException{
+		
+//				String nextToken = testFLOAT.nextToken().toString();
+//				assertEquals("<FLOAT, r:1, 98.8095>", nextToken);			
+	}
+
+	//	@Test
+	//	public void testReadChar() {
+	//		//TODO: LATER ALLIGATER
+	//	}
+	//
+	//	@Test
+	//	public void testPeekChar() {
+	//		//TODO: LATER
+	//	}
+	//
+	//	@Test
+	//	public void testScanNumber() {
+	//
+	//	}
+	//
+	//	@Test
+	//	public void testScanId(){
+	//
+	//	}
+	//
+	//	@Test
+	//	public void testScanOperator() {
+	//
+	//	}
+	//
+	//
+	//
+	//	@Test
+	//	public void testNextToken() {
+	//
+	//	}
 
 }

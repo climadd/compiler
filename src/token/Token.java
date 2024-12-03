@@ -37,7 +37,8 @@ public class Token {
 			return ("<" + tipo + ", r:" + riga + ">");
 	}
 
-
+	//nota: dopo ogni virgola preferisco mettere uno spazio
+	
 	/*	esempio output toString()
 	 * 
 	 * 	<TYINT,r:1><ID,r:1,tempa><SEMI,r:1>
