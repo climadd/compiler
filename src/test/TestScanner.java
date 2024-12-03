@@ -112,7 +112,7 @@ class TestScanner {
 				assertEquals("<INT, r:2, 698>", nextString);
 				
 				nextString = testINT.nextToken().toString();
-				assertEquals("<INT, r:4, 560099", nextString);
+				assertEquals("<INT, r:4, 560099>", nextString);
 				
 				nextString = testINT.nextToken().toString();
 				assertEquals("<INT, r:5, 1234>", nextString);
@@ -122,8 +122,29 @@ class TestScanner {
 	@Test
 	public void testFLOAT() throws LexicalException{
 		
-//				String nextToken = testFLOAT.nextToken().toString();
-//				assertEquals("<FLOAT, r:1, 98.8095>", nextToken);			
+				String nextString = testFLOAT.nextToken().toString();
+				assertEquals("<FLOAT, r:1, 98.8095>", nextString);
+				
+				testFLOAT.nextToken(); //dovrà lanciare eccezione
+				testFLOAT.nextToken(); //dovrà lanciare eccezione
+				
+				nextString = testFLOAT.nextToken().toString();
+				assertEquals("<FLOAT, r:5, 89.99999>", nextString);
+				
+	}
+	
+	@Test
+	public void testID() throws LexicalException{
+		
+		String nextString = testId.nextToken().toString();
+		assertEquals("<ID, r:1, jskjdsfhkjdshkf>", nextString);
+		
+	}
+	
+	@Test
+	public void testKeyWord() throws LexicalException{
+		
+		
 	}
 
 	//	@Test

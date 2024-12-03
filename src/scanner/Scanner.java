@@ -108,17 +108,16 @@ public class Scanner {
 		}
 	}
 
-	//SCAN NUMBER	
-//	ERRORE STA NEL MODO DI AGGIORNARE LE VARIABILI DI CICLO
-	
+	//SCAN NUMBER	FINITA (TODO: IMPLEMENTA LIMITE DECIMALI)
+
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
 		String numString = "";
 		Token token;
 		nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
-		
+
 		boolean decimalFlag = false;
 		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola  
-		
+
 		while(numbers.contains(nextChar) || nextChar == '.') {
 			//gestione decimal point
 			if(nextChar == '.') {
@@ -127,11 +126,10 @@ public class Scanner {
 				}
 				decimalFlag = true;
 			}
-			
+
 			//check su cifra piu significativa = 0
 			char predict = peekChar(); //variabile di controllo
 			if (!(numString.length() == 0 & nextChar == '0' & predict != '.')) {
-				System.out.println("Reading character: '" + nextChar + "'");
 				numString += nextChar;
 			}			
 			nextChar = readChar();
@@ -155,9 +153,12 @@ public class Scanner {
 	// il Token associato Parola Chiave (per generare i Token per le
 	// parole chiave usate l'HaskMap di corrispondenza
 	//Se riconosce una KeyWord ritorna il token KEYWORD
+	
+	//TODO: AGGIUNGERE BREAK THE CYCLE QUANDO INCONTRO UN CARATTERE DA SKIPPARE. ORA LOOPO INFINITO
 	private Token scanId(char nextChar) throws IOException {
 		String lettString = "";
 		Token token;
+		nextChar = readChar();
 		while(letters.contains(nextChar)) {
 			Character c = readChar();		//consuma input
 			lettString += c;
