@@ -26,7 +26,6 @@ public class Scanner {
 	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il TokenType  corrispondente
 	private HashMap<String, TokenType> keyWordsMap;
 
-
 	//costruttore
 	public Scanner(String fileName) throws FileNotFoundException {
 
@@ -60,23 +59,19 @@ public class Scanner {
 		keyWordsMap.put("print", TokenType.PRINT);
 		keyWordsMap.put("int", TokenType.INT);
 		keyWordsMap.put("float", TokenType.FLOAT);
-
 	}
 
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
-
 	public Token nextToken() throws LexicalException  {	//ritorna (consumando) il prossimo token sullo stream 
 		try {	
 			char nextChar = peekChar();  //LA READ LA EFFETTUERò NEI METODI, OGNUNO LA GESTISCE IN AUTONOMIA
 
 			//blocco dello skipChar
 			while(skipChars.contains(nextChar)) {
-
 				if(nextChar == EOF) {
 					return scanEOF();
 				}
-
 				if(nextChar == '\n') {		
 					this.line++;
 				}			
@@ -98,8 +93,6 @@ public class Scanner {
 			else if(numbers.contains(nextChar)) {
 				return scanNumber(nextChar);
 			}			
-
-
 			else {
 				throw new LexicalException("Invalid Character! '" + nextChar + "' at line " + line);
 			} 
@@ -108,20 +101,38 @@ public class Scanner {
 		}
 	}
 
-	//SCAN NUMBER	FINITA (TODO: IMPLEMENTA LIMITE DECIMALI)
-
+	//SCAN NUMBER	FINITA 
+	//(TODO: IMPLEMENTA LIMITE DECIMALI, IMPLEMENTA LETTURA POST ECCEZIONE)
+	
+	//ES: 89.999999999 VA TOKENIZZATO A 5 CIFRE DECIMALI? OPPURE LANCIATA EXCEPTION
+	//ES: 
+	
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
 		String numString = "";
 		Token token;
 		nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
 
 		boolean decimalFlag = false;
-		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola  
+		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola = 5
 
 		while(numbers.contains(nextChar) || nextChar == '.') {
 			//gestione decimal point
 			if(nextChar == '.') {
 				if (decimalFlag) {
+					
+					
+					//TODO: CONDIZIONE DA STABILIRE!!!!!! FIN DOVE CONSUMO L'INPUT??????
+					// ES 13.13.13 > CONSUMO FINO ALLA FINE E OK
+			
+					//ES 13.13.13+ > IL + SECONDO ME DOVREBBE ESSERE LETTO
+					//ES 13INT
+					//ES 13;
+					//SE è ILLEGALE, FINO A CHE PUNTO LEGGO?
+					//13.13.13+
+					//ES 13.13.13INT > COSA SUCCEDE??	
+					while(numbers.contains(nextChar)) {
+						nextChar= readChar();
+					}
 					throw new LexicalException("Invalid Number! multiple '.' at line " + line);
 				}
 				decimalFlag = true;
@@ -129,13 +140,12 @@ public class Scanner {
 
 			//check su cifra piu significativa = 0
 			char predict = peekChar(); //variabile di controllo
-			if (!(numString.length() == 0 & nextChar == '0' & predict != '.')) {
+			if (!(numString.length() == 0 && nextChar == '0' && predict != '.')) {
 				numString += nextChar;
 			}			
 			nextChar = readChar();
 			predict = peekChar();
 		}
-
 		if(!decimalFlag) { 
 			token = new Token(TokenType.INT, line, numString);
 		}
@@ -153,15 +163,15 @@ public class Scanner {
 	// il Token associato Parola Chiave (per generare i Token per le
 	// parole chiave usate l'HaskMap di corrispondenza
 	//Se riconosce una KeyWord ritorna il token KEYWORD
-	
-	//TODO: AGGIUNGERE BREAK THE CYCLE QUANDO INCONTRO UN CARATTERE DA SKIPPARE. ORA LOOPO INFINITO
+
+	//TODO: la readchar mi consuma il carattere di invio e il newline non mi viene
 	private Token scanId(char nextChar) throws IOException {
 		String lettString = "";
 		Token token;
 		nextChar = readChar();
 		while(letters.contains(nextChar)) {
-			Character c = readChar();		//consuma input
-			lettString += c;
+			lettString += nextChar;
+			nextChar = readChar();
 		} 
 
 		if(keyWordsMap.containsKey(lettString)) {
@@ -173,7 +183,6 @@ public class Scanner {
 			return token;
 		}
 	}
-
 
 
 
@@ -204,7 +213,6 @@ public class Scanner {
 				// se il carattere non era composito
 				token = new Token(operatorMap.get(nextChar), line);
 			}
-
 		}
 		return token;
 	}

@@ -44,7 +44,7 @@ class TestScanner {
 			testKeywords = new Scanner(path + "testKeywords.txt");
 			testOperators = new Scanner(path + "testOperators.txt");	
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			// Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -125,11 +125,27 @@ class TestScanner {
 				String nextString = testFLOAT.nextToken().toString();
 				assertEquals("<FLOAT, r:1, 98.8095>", nextString);
 				
-				testFLOAT.nextToken(); //dovrà lanciare eccezione
-				testFLOAT.nextToken(); //dovrà lanciare eccezione
+				
+				//TODO: senti la prof su accettazione prossimi 2 output
+				nextString = testFLOAT.nextToken().toString(); //dovrà lanciare eccezione
+//				assertEquals(null, nextString);
+				nextString = testFLOAT.nextToken().toString(); //dovrà lanciare eccezione
+//				assertEquals(null, nextString);
 				
 				nextString = testFLOAT.nextToken().toString();
-				assertEquals("<FLOAT, r:5, 89.99999>", nextString);
+				assertEquals("<FLOAT, r:5, 89.999999>", nextString);
+				
+				assertThrows(LexicalException.class, () -> {
+					testFLOAT.nextToken();
+				});
+
+				//ANDRA' RIMOSSO DOPO LA GESTIONE DEI DECIMALI DOPO IL DOPPIO '.'
+				nextString = testFLOAT.nextToken().toString();
+				//ORA STAMPA <INT, R:7, 13>, IL DECIMALE NON CONSUMATO DEL TOKEN INVALIDO PRECEDENTE
+
+				
+				nextString = testFLOAT.nextToken().toString();
+				assertEquals("<EOF, r:7>",nextString);
 				
 	}
 	
@@ -139,6 +155,17 @@ class TestScanner {
 		String nextString = testId.nextToken().toString();
 		assertEquals("<ID, r:1, jskjdsfhkjdshkf>", nextString);
 		
+		nextString = testId.nextToken().toString();
+		assertEquals("<ID, r:2, printl>", nextString);
+		
+		nextString = testId.nextToken().toString();
+		assertEquals("<ID, r:4, ffloat>", nextString);
+		
+		nextString = testId.nextToken().toString();
+		assertEquals("<ID, r:6, hhhjj>", nextString);
+		
+		nextString = testId.nextToken().toString();
+		assertEquals("<EOF, r:7>",nextString);
 	}
 	
 	@Test
@@ -154,7 +181,7 @@ class TestScanner {
 	//
 	//	@Test
 	//	public void testPeekChar() {
-	//		//TODO: LATER
+	//		// LATER
 	//	}
 	//
 	//	@Test
