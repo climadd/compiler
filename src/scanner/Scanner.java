@@ -61,9 +61,19 @@ public class Scanner {
 		keyWordsMap.put("float", TokenType.FLOAT);
 	}
 
+	/*
+	  caratteri che non sono riconosciuti
+	  errori nel riconoscimento di un numero:
+		i) intero che inizia per zero
+		ii) floating point troppo lungo oppure
+		iii) numero seguito da lettera
+	  errori nel riconoscimento di un identificatore 
+		iv) identificatore seguito da numero.
+	 */
+	
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
-	public Token nextToken() throws LexicalException  {	//ritorna (consumando) il prossimo token sullo stream 
+	public Token nextToken() throws LexicalException {	//ritorna (consumando) il prossimo token sullo stream 
 		try {	
 			char nextChar = peekChar();  //LA READ LA EFFETTUERò NEI METODI, OGNUNO LA GESTISCE IN AUTONOMIA
 
@@ -119,17 +129,9 @@ public class Scanner {
 			//gestione decimal point
 			if(nextChar == '.') {
 				if (decimalFlag) {
-					
-					
-					//TODO: CONDIZIONE DA STABILIRE!!!!!! FIN DOVE CONSUMO L'INPUT??????
-					// ES 13.13.13 > CONSUMO FINO ALLA FINE E OK
-			
-					//ES 13.13.13+ > IL + SECONDO ME DOVREBBE ESSERE LETTO
-					//ES 13INT
-					//ES 13;
-					//SE è ILLEGALE, FINO A CHE PUNTO LEGGO?
-					//13.13.13+
-					//ES 13.13.13INT > COSA SUCCEDE??	
+									
+					//CONDIZIONE DA STABILIRE!!!!!! FIN DOVE CONSUMO L'INPUT??????
+					//risposta sul forum
 					while(numbers.contains(nextChar)) {
 						nextChar= readChar();
 					}
@@ -163,23 +165,25 @@ public class Scanner {
 	// il Token associato Parola Chiave (per generare i Token per le
 	// parole chiave usate l'HaskMap di corrispondenza
 	//Se riconosce una KeyWord ritorna il token KEYWORD
-
-	//TODO: la readchar mi consuma il carattere di invio e il newline non mi viene
-	private Token scanId(char nextChar) throws IOException {
-		String lettString = "";
-		Token token;
-		nextChar = readChar();
-		while(letters.contains(nextChar)) {
-			lettString += nextChar;
+	
+	private Token scanId(char nextChar) throws IOException, LexicalException {
+		
+		StringBuilder idString = new StringBuilder(nextChar);	
+		
+		while(letters.contains(peekChar())) {
 			nextChar = readChar();
+			idString.append(nextChar);	
 		} 
-
-		if(keyWordsMap.containsKey(lettString)) {
-			token = new Token(keyWordsMap.get(lettString) , line, lettString);
+		//TODO: basandosi sul fatto che print2 è eccezione lessicale
+		if(numbers.contains(nextChar)) {
+			throw new LexicalException("Id contiene numeri");
+		}
+		if(keyWordsMap.containsKey(idString.toString())) {
+			Token token = new Token(keyWordsMap.get(idString.toString()) , line, idString.toString());
 			return token;
 		}
 		else {
-			token = new Token(TokenType.ID, line, lettString);
+			Token token = new Token(TokenType.ID, line, idString.toString());
 			return token;
 		}
 	}

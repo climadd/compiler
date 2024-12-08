@@ -17,7 +17,7 @@ import token.TokenType;
 class TestScanner {
 
 	//Scanner erroriID
-	//Scanner erroriNumbers
+	Scanner testErroriNumbers;
 	Scanner testEOF;
 	Scanner testFLOAT;
 	Scanner testGenerale;
@@ -37,6 +37,7 @@ class TestScanner {
 
 			testEOF = new Scanner(path + "testEOF.txt");
 			testFLOAT = new Scanner(path + "testFLOAT.txt");
+			testErroriNumbers = new Scanner(path + "erroriNumbers.txt");
 			testGenerale = new Scanner(path + "testGenerale.txt");
 			testId = new Scanner(path + "testId.txt");
 			testIdKeyWords = new Scanner(path + "testIdKeyWords.txt");
@@ -133,20 +134,29 @@ class TestScanner {
 //				assertEquals(null, nextString);
 				
 				nextString = testFLOAT.nextToken().toString();
-				assertEquals("<FLOAT, r:5, 89.999999>", nextString);
+				assertEquals("<FLOAT, r:5, 89.999999>", nextString); //da cambiare 5 cifre
+				
+				nextString = testFLOAT.nextToken().toString();
+				assertEquals("<FLOAT, r:7, 6.123>",nextString);
 				
 				assertThrows(LexicalException.class, () -> {
 					testFLOAT.nextToken();
 				});
-
+				
 				//ANDRA' RIMOSSO DOPO LA GESTIONE DEI DECIMALI DOPO IL DOPPIO '.'
 				nextString = testFLOAT.nextToken().toString();
-				//ORA STAMPA <INT, R:7, 13>, IL DECIMALE NON CONSUMATO DEL TOKEN INVALIDO PRECEDENTE
-
+				//ORA STAMPA <INT, R:8, 13>, IL DECIMALE NON CONSUMATO DEL TOKEN INVALIDO PRECEDENTE
 				
 				nextString = testFLOAT.nextToken().toString();
-				assertEquals("<EOF, r:7>",nextString);
+				assertEquals("<EOF, r:10>",nextString);
 				
+	}
+	
+	@Test
+	public void testErroriNumbers() throws LexicalException{
+		String nextString = testErroriNumbers.nextToken().toString();
+		System.out.println(nextString);
+		//assertEquals("<INT, R:1, 0>", nextString);
 	}
 	
 	@Test
