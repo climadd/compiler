@@ -149,6 +149,7 @@ public class Scanner {
 			predict = peekChar();
 		}
 		if(!decimalFlag) { 
+			if(numString == "") numString = "0";
 			token = new Token(TokenType.INT, line, numString);
 		}
 		else {
@@ -179,7 +180,7 @@ public class Scanner {
 			throw new LexicalException("Id contiene numeri");
 		}
 		if(keyWordsMap.containsKey(idString.toString())) {
-			Token token = new Token(keyWordsMap.get(idString.toString()) , line, idString.toString());
+			Token token = new Token(keyWordsMap.get(idString.toString()) , line);
 			return token;
 		}
 		else {
@@ -223,8 +224,7 @@ public class Scanner {
 
 	//SCAN EOF		FINITA
 	private Token scanEOF() {
-		Token token;
-		token = new Token(TokenType.EOF, line);
+		Token token = new Token(TokenType.EOF, line);
 		return token;
 	}
 

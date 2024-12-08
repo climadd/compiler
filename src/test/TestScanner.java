@@ -16,7 +16,7 @@ import token.TokenType;
 
 class TestScanner {
 
-	//Scanner erroriID
+	Scanner testErroriID;
 	Scanner testErroriNumbers;
 	Scanner testEOF;
 	Scanner testFLOAT;
@@ -24,7 +24,7 @@ class TestScanner {
 	Scanner testId;
 	Scanner testIdKeyWords;
 	Scanner testINT;
-	Scanner testKeywords;
+	Scanner testKeyWords;
 	Scanner testOperators;
 
 	String path;
@@ -35,15 +35,19 @@ class TestScanner {
 		try {
 			path = "./src/test/data/testScanner/";
 
-			testEOF = new Scanner(path + "testEOF.txt");
-			testFLOAT = new Scanner(path + "testFLOAT.txt");
+			testEOF = new Scanner(path + "testEOF.txt");	//finito
+			testOperators = new Scanner(path + "testOperators.txt");	//finito
+			
+			testINT = new Scanner(path + "testINT.txt");	//finito
+			testFLOAT = new Scanner(path + "testFLOAT.txt");	
 			testErroriNumbers = new Scanner(path + "erroriNumbers.txt");
+
+			testId = new Scanner(path + "testId.txt");	//finito
+			testKeyWords = new Scanner(path + "testKeywords.txt");	//finito
+			testIdKeyWords = new Scanner(path + "testIdKeyWords.txt");	//finito
+			testErroriID = new Scanner(path + "erroriID.txt");
+	
 			testGenerale = new Scanner(path + "testGenerale.txt");
-			testId = new Scanner(path + "testId.txt");
-			testIdKeyWords = new Scanner(path + "testIdKeyWords.txt");
-			testINT = new Scanner(path + "testINT.txt");
-			testKeywords = new Scanner(path + "testKeywords.txt");
-			testOperators = new Scanner(path + "testOperators.txt");	
 		} catch (FileNotFoundException e) {
 			// Auto-generated catch block
 			e.printStackTrace();
@@ -155,8 +159,16 @@ class TestScanner {
 	@Test
 	public void testErroriNumbers() throws LexicalException{
 		String nextString = testErroriNumbers.nextToken().toString();
+		assertEquals("<INT, r:1, 0>", nextString);
+		
+		//TODO: il successivo dovrebbe darmi stato di errore
+		nextString = testErroriNumbers.nextToken().toString();	
 		System.out.println(nextString);
-		//assertEquals("<INT, R:1, 0>", nextString);
+//		assertThrows(LexicalException.class, () -> {
+//			testErroriNumbers.nextToken();
+//		});
+		nextString = testErroriNumbers.nextToken().toString();
+		System.out.println(nextString);
 	}
 	
 	@Test
@@ -181,9 +193,70 @@ class TestScanner {
 	@Test
 	public void testKeyWord() throws LexicalException{
 		
+		String nextString = testKeyWords.nextToken().toString();
+		assertEquals("<PRINT, r:2>", nextString);
 		
+		nextString = testKeyWords.nextToken().toString();
+		assertEquals("<FLOAT, r:2>", nextString);
+		
+		nextString = testKeyWords.nextToken().toString();
+		assertEquals("<INT, r:5>", nextString);
+		
+		nextString = testKeyWords.nextToken().toString();
+		assertEquals("<EOF, r:5>", nextString);
+	}
+	
+	@Test
+	public void testIdKeywords() throws LexicalException{
+		
+		String nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<INT, r:1>", nextString);
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<ID, r:1, inta>", nextString);
+		
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<FLOAT, r:2>", nextString);
+		
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<PRINT, r:3>", nextString);
+		
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<ID, r:4, nome>", nextString);
+		
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<ID, r:5, intnome>", nextString);
+		
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<INT, r:6>", nextString);
+		nextString = testIdKeyWords.nextToken().toString();
+		assertEquals("<ID, r:6, nome>", nextString);
 	}
 
+	public void testErroriID() throws LexicalException{
+		
+	}
+	
+	@Test
+	public void testGenerale() throws LexicalException{
+		String nextString = testGenerale.nextToken().toString();
+		assertEquals("<INT, r:1>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ID, r:1, temp>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<SEMI, r:1>", nextString);
+		
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ID, r:2, temp>", nextString);	
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<OP_ASSIGN, r:2, +=>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<FLOAT, r:2, 5.>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<SEMI, r:2>", nextString);
+		
+		
+	}
+	
 	//	@Test
 	//	public void testReadChar() {
 	//		//TODO: LATER ALLIGATER
@@ -191,7 +264,7 @@ class TestScanner {
 	//
 	//	@Test
 	//	public void testPeekChar() {
-	//		// LATER
+	//
 	//	}
 	//
 	//	@Test
