@@ -8,6 +8,7 @@ public enum TokenType {
 	TYINT,	// int
 	TYFLOAT,	// float
 	PRINT,	// print
+	ASSIGN,
 	OP_ASSIGN,	// = | += | -= | *= | /=
 	PLUS,	// +
 	MINUS,	// -

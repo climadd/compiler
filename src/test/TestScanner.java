@@ -37,17 +37,17 @@ class TestScanner {
 
 			testEOF = new Scanner(path + "testEOF.txt");	//finito
 			testOperators = new Scanner(path + "testOperators.txt");	//finito
-			
+
 			testINT = new Scanner(path + "testINT.txt");	//finito
-			testFLOAT = new Scanner(path + "testFLOAT.txt");	//MANCA LIMITE DECIMALE
-			testErroriNumbers = new Scanner(path + "erroriNumbers.txt");
+			testFLOAT = new Scanner(path + "testFLOAT.txt");	//finito
+			testErroriNumbers = new Scanner(path + "erroriNumbers.txt");	//finito
 
 			testId = new Scanner(path + "testId.txt");	//finito
 			testKeyWords = new Scanner(path + "testKeywords.txt");	//finito
 			testIdKeyWords = new Scanner(path + "testIdKeyWords.txt");	//finito
 			testErroriID = new Scanner(path + "erroriID.txt");
-	
-			testGenerale = new Scanner(path + "testGenerale.txt");
+
+			testGenerale = new Scanner(path + "testGenerale.txt");	//fatto
 		} catch (FileNotFoundException e) {
 			// Auto-generated catch block
 			e.printStackTrace();
@@ -91,7 +91,7 @@ class TestScanner {
 		assertEquals("<OP_ASSIGN, r:5, +=>", nextString);
 
 		nextString = testOperators.nextToken().toString();
-		assertEquals("<OP_ASSIGN, r:6>", nextString);
+		assertEquals("<ASSIGN, r:6>", nextString);
 
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:6, -=>", nextString);
@@ -100,7 +100,7 @@ class TestScanner {
 		assertEquals("<MINUS, r:8>", nextString);
 
 		nextString = testOperators.nextToken().toString();
-		assertEquals("<OP_ASSIGN, r:8>", nextString);
+		assertEquals("<ASSIGN, r:8>", nextString);
 
 		nextString = testOperators.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:8, *=>", nextString);
@@ -112,119 +112,137 @@ class TestScanner {
 	@Test
 	public void testINT() throws LexicalException{
 
-		
-				String nextString = testINT.nextToken().toString();
-				assertEquals("<INT, r:2, 698>", nextString);
-				
-				nextString = testINT.nextToken().toString();
-				assertEquals("<INT, r:4, 560099>", nextString);
-				
-				nextString = testINT.nextToken().toString();
-				assertEquals("<INT, r:5, 1234>", nextString);
-		
+
+		String nextString = testINT.nextToken().toString();
+		assertEquals("<INT, r:2, 00698>", nextString);
+
+		nextString = testINT.nextToken().toString();
+		assertEquals("<INT, r:4, 560099>", nextString);
+
+		nextString = testINT.nextToken().toString();
+		assertEquals("<INT, r:5, 1234>", nextString);
+
 	}
 
 	@Test
 	public void testFLOAT() throws LexicalException{
+
+		String nextString = testFLOAT.nextToken().toString();
+		assertEquals("<FLOAT, r:1, 098.8095>", nextString);
+
+
+		nextString = testFLOAT.nextToken().toString();
+		assertEquals("<FLOAT, r:2, 0.>", nextString);
+		nextString = testFLOAT.nextToken().toString();
+		assertEquals("<FLOAT, r:3, 98.>", nextString);
+
+		assertThrows(LexicalException.class, () -> {
+			//89.999999
+			testFLOAT.nextToken();
+		});
 		
-				String nextString = testFLOAT.nextToken().toString();
-				assertEquals("<FLOAT, r:1, 98.8095>", nextString);
-				
-				
-				nextString = testFLOAT.nextToken().toString(); //dovrà lanciare eccezione
-				assertEquals("<FLOAT, r:2, 0.>", nextString);
-				nextString = testFLOAT.nextToken().toString(); //dovrà lanciare eccezione
-				assertEquals("<FLOAT, r:3, 98.>", nextString);
-				
-				nextString = testFLOAT.nextToken().toString();
-				assertEquals("<FLOAT, r:5, 89.999999>", nextString); //da cambiare 5 cifre
-				
-				nextString = testFLOAT.nextToken().toString();
-				assertEquals("<FLOAT, r:7, 6.123>",nextString);
-				
-				assertThrows(LexicalException.class, () -> {
-					testFLOAT.nextToken();
-				});
-				
-				//ANDRA' RIMOSSO DOPO LA GESTIONE DEI DECIMALI DOPO IL DOPPIO '.'
-				nextString = testFLOAT.nextToken().toString();
-				//ORA STAMPA <INT, R:8, 13>, IL DECIMALE NON CONSUMATO DEL TOKEN INVALIDO PRECEDENTE
-				
-				nextString = testFLOAT.nextToken().toString();
-				assertEquals("<EOF, r:10>",nextString);
-				
+		nextString = testFLOAT.nextToken().toString();
+		assertEquals("<FLOAT, r:6, 89.12345>",nextString);
+		
+		nextString = testFLOAT.nextToken().toString();
+		assertEquals("<FLOAT, r:7, 0006.123>",nextString);
+
+		assertThrows(LexicalException.class, () -> {
+			testFLOAT.nextToken();
+		});
+
+		nextString = testFLOAT.nextToken().toString();
+		assertEquals("<INT, r:9, 13>", nextString);
+
+		nextString = testFLOAT.nextToken().toString();
+		assertEquals("<EOF, r:10>",nextString);
+
 	}
-	
+
 	@Test
 	public void testErroriNumbers() throws LexicalException{
 		String nextString = testErroriNumbers.nextToken().toString();
-		assertEquals("<INT, r:1, 0>", nextString);
-		
-		//TODO: il successivo dovrebbe darmi stato di errore
+		assertEquals("<INT, r:1, 00>", nextString);
+
 		nextString = testErroriNumbers.nextToken().toString();	
 		System.out.println(nextString);
-//		assertThrows(LexicalException.class, () -> {
-//			testErroriNumbers.nextToken();
-//		});
+		assertEquals("<INT, r:2, 123>", nextString);
+
+
 		nextString = testErroriNumbers.nextToken().toString();
 		System.out.println(nextString);
+		assertEquals("<ID, r:2, alieno>", nextString);
+		
+		nextString = testErroriNumbers.nextToken().toString();
+		System.out.println(nextString);
+		assertEquals("<FLOAT, r:3, 12.>", nextString);
+		
+		nextString = testErroriNumbers.nextToken().toString();
+		System.out.println(nextString);
+		assertEquals("<ID, r:3, a>", nextString);
+		
+		assertThrows(LexicalException.class, () -> {
+			//123.121212
+			testErroriNumbers.nextToken();		
+		});
+		
 	}
-	
+
 	@Test
 	public void testID() throws LexicalException{
-		
+
 		String nextString = testId.nextToken().toString();
 		assertEquals("<ID, r:1, jskjdsfhkjdshkf>", nextString);
-		
+
 		nextString = testId.nextToken().toString();
 		assertEquals("<ID, r:2, printl>", nextString);
-		
+
 		nextString = testId.nextToken().toString();
 		assertEquals("<ID, r:4, ffloat>", nextString);
-		
+
 		nextString = testId.nextToken().toString();
 		assertEquals("<ID, r:6, hhhjj>", nextString);
-		
+
 		nextString = testId.nextToken().toString();
 		assertEquals("<EOF, r:7>",nextString);
 	}
-	
+
 	@Test
 	public void testKeyWord() throws LexicalException{
-		
+
 		String nextString = testKeyWords.nextToken().toString();
 		assertEquals("<PRINT, r:2>", nextString);
-		
+
 		nextString = testKeyWords.nextToken().toString();
 		assertEquals("<TYFLOAT, r:2>", nextString);
-		
+
 		nextString = testKeyWords.nextToken().toString();
 		assertEquals("<TYINT, r:5>", nextString);
-		
+
 		nextString = testKeyWords.nextToken().toString();
 		assertEquals("<EOF, r:5>", nextString);
 	}
-	
+
 	@Test
 	public void testIdKeywords() throws LexicalException{
-		
+
 		String nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<TYINT, r:1>", nextString);
 		nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<ID, r:1, inta>", nextString);
-		
+
 		nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<TYFLOAT, r:2>", nextString);
-		
+
 		nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<PRINT, r:3>", nextString);
-		
+
 		nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<ID, r:4, nome>", nextString);
-		
+
 		nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<ID, r:5, intnome>", nextString);
-		
+
 		nextString = testIdKeyWords.nextToken().toString();
 		assertEquals("<TYINT, r:6>", nextString);
 		nextString = testIdKeyWords.nextToken().toString();
@@ -232,9 +250,17 @@ class TestScanner {
 	}
 
 	public void testErroriID() throws LexicalException{
+		String nextString = testErroriID.nextToken().toString();
+		assertEquals("<ID, r:1, iii>", nextString);
+		nextString = testErroriID.nextToken().toString();
+		assertEquals("<INT, r:1, 3>", nextString);		
+		nextString = testErroriID.nextToken().toString();
+		assertEquals("<ID, r:1, printeremo>", nextString);
 		
+		nextString = testErroriID.nextToken().toString();
+		assertEquals("<ID, r:3, sprintf>", nextString);
 	}
-	
+
 	@Test
 	public void testGenerale() throws LexicalException{
 		String nextString = testGenerale.nextToken().toString();
@@ -243,19 +269,56 @@ class TestScanner {
 		assertEquals("<ID, r:1, temp>", nextString);
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<SEMI, r:1>", nextString);
-		
+
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<ID, r:2, temp>", nextString);	
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<OP_ASSIGN, r:2, +=>", nextString);
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<FLOAT, r:2, 5.>", nextString);
-//		nextString = testGenerale.nextToken().toString();
-//		assertEquals("<SEMI, r:2>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<SEMI, r:2>", nextString);
+
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<TYFLOAT, r:4>", nextString);		
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ID, r:4, b>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<SEMI, r:4>", nextString);
 		
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ID, r:5, b>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ASSIGN, r:5>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ID, r:5, temp>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<PLUS, r:5>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<FLOAT, r:5, 3.2>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<SEMI, r:5>", nextString);
 		
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<PRINT, r:6>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<ID, r:6, b>", nextString);
+		nextString = testGenerale.nextToken().toString();
+		assertEquals("<SEMI, r:6>", nextString);
 	}
-	
+
+
+	@Test
+	public void testPeekToken() throws LexicalException {
+
+		assertEquals(testGenerale.peekToken().getType(), TokenType.TYINT);
+		assertEquals(testGenerale.peekToken().getType(), TokenType.TYINT);
+		assertEquals(testGenerale.nextToken().getType(), TokenType.TYINT);
+		//		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+		//		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+		//		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+	}
+
 	//	@Test
 	//	public void testReadChar() {
 	//		//TODO: LATER ALLIGATER

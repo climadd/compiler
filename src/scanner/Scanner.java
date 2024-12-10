@@ -26,6 +26,9 @@ public class Scanner {
 	// keyWordsMap: mapping fra le stringhe "print", "float", "int" e il TokenType  corrispondente
 	private HashMap<String, TokenType> keyWordsMap;
 
+	//per peekToken()
+	Token nextTk = null;
+
 	//costruttore
 	public Scanner(String fileName) throws FileNotFoundException {
 
@@ -53,7 +56,7 @@ public class Scanner {
 		operatorMap.put('*', TokenType.TIMES);
 		operatorMap.put('/', TokenType.DIVIDE);
 		operatorMap.put(';', TokenType.SEMI);
-		operatorMap.put('=', TokenType.OP_ASSIGN);
+		operatorMap.put('=', TokenType.ASSIGN);
 
 		this.keyWordsMap = new HashMap<String, TokenType>();
 		keyWordsMap.put("print", TokenType.PRINT);
@@ -71,86 +74,91 @@ public class Scanner {
 		iv) identificatore seguito da numero.
 	 */
 
+	public Token peekToken() throws LexicalException {
+		if (nextTk == null) {
+			nextTk = nextToken();
+		}
+		return nextTk;
+	}
+
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
 	public Token nextToken() throws LexicalException {	//ritorna (consumando) il prossimo token sullo stream 
-		try {	
-			char nextChar = peekChar();  //LA READ LA EFFETTUERò NEI METODI, OGNUNO LA GESTISCE IN AUTONOMIA
+		if (nextTk != null) return nextTk;
+		else {
+			try {	
+				char nextChar = peekChar();  //LA READ LA EFFETTUERò NEI METODI, OGNUNO LA GESTISCE IN AUTONOMIA
 
-			//blocco dello skipChar
-			while(skipChars.contains(nextChar)) {
-				if(nextChar == EOF) {
-					return scanEOF();
+				//blocco dello skipChar
+				while(skipChars.contains(nextChar)) {
+					if(nextChar == EOF) {
+						return scanEOF();
+					}
+					if(nextChar == '\n') {		
+						this.line++;
+					}			
+					readChar();	
+					nextChar = peekChar();
+				}		
+
+				//blocco operatori - scanOperator()
+				if(operatorMap.containsKey(nextChar)) {
+					return scanOperator(nextChar);
 				}
-				if(nextChar == '\n') {		
-					this.line++;
+
+				//blocco lettere - scanId()
+				else if(letters.contains(nextChar)) {
+					return scanId(nextChar);
+				}
+
+				//blocco numeri - scanNumber()
+				else if(numbers.contains(nextChar)) {
+					return scanNumber(nextChar);
 				}			
-				readChar();	
-				nextChar = peekChar();
-			}		
-
-			//blocco operatori - scanOperator()
-			if(operatorMap.containsKey(nextChar)) {
-				return scanOperator(nextChar);
+				else {
+					throw new LexicalException("Invalid Character! '" + nextChar + "' at line " + line);
+				} 	
+			} catch (IOException e) {
+				throw new LexicalException("DA STABILIRE");
 			}
-
-			//blocco lettere - scanId()
-			else if(letters.contains(nextChar)) {
-				return scanId(nextChar);
-			}
-
-			//blocco numeri - scanNumber()
-			else if(numbers.contains(nextChar)) {
-				return scanNumber(nextChar);
-			}			
-			else {
-				throw new LexicalException("Invalid Character! '" + nextChar + "' at line " + line);
-			} 
-		} catch (IOException e) {
-			throw new LexicalException("Exception!");
+			// TODO: aggiungi caso in cui setti nextTk a null		nextTk
 		}
 	}
 
 	//SCAN NUMBER	FINITA 
 	//(TODO: IMPLEMENTA LIMITE DECIMALI, IMPLEMENTA LETTURA POST ECCEZIONE)
 
-	//ES: 89.999999999 VA TOKENIZZATO A 5 CIFRE DECIMALI? OPPURE LANCIATA EXCEPTION 
-
+	//ES: 89.999999999 VA LANCIATA EXCEPTION, non genero token
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
 
 		StringBuilder numString = new StringBuilder();
+		numString.append(nextChar);
 		nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
 
 		boolean decimalFlag = false;
-		//		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola = 5
+		int decimalCount = 6;	
 
-		while(numbers.contains(nextChar) || nextChar == '.') {
-			//gestione decimal point
-			if(nextChar == '.') {
-				if (decimalFlag) {						
-					// FIN DOVE CONSUMO L'INPUT?????? = risposta sul forum
-					while(numbers.contains(nextChar)) {
-						nextChar= readChar();
-					}
-					throw new LexicalException("Invalid Number! multiple '.' at line " + line);
+		while(numbers.contains(peekChar()) || peekChar() == '.') {
+			if(peekChar() == '.') {
+				if (decimalFlag == true) {		//caso 2 '.' decimali
+					nextChar = readChar();
+					throw new LexicalException("Invalid Number! Multiple '.' at line " + line);
 				}
-				decimalFlag = true;
+				else decimalFlag = true;
 			}
-
-			//check su cifra piu significativa = 0
-			char predict = peekChar(); //variabile di controllo
-			if (!(numString.length() == 0 && nextChar == '0' && predict != '.')) {
-				numString.append(nextChar);
-			}			
 			nextChar = readChar();
-			predict = peekChar();
+			if(decimalFlag == true) decimalCount--;
+			numString.append(nextChar);
+
 		}
 		if(!decimalFlag) { 
-			if(numString.isEmpty()) numString.append(0);	//l'unico caso in cui la stringa è vuota è 00000
 			Token token = new Token(TokenType.INT, line, numString.toString());
 			return token;
 		}
 		else {
+			if(decimalCount < 0) {
+				throw new LexicalException("Invalid Number! Decimal digits exceed 5 at line " + line);
+			}
 			Token token = new Token(TokenType.FLOAT, line, numString.toString());
 			return token;
 		}		 
