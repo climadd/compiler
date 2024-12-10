@@ -57,8 +57,8 @@ public class Scanner {
 
 		this.keyWordsMap = new HashMap<String, TokenType>();
 		keyWordsMap.put("print", TokenType.PRINT);
-		keyWordsMap.put("int", TokenType.INT);
-		keyWordsMap.put("float", TokenType.FLOAT);
+		keyWordsMap.put("int", TokenType.TYINT);
+		keyWordsMap.put("float", TokenType.TYFLOAT);
 	}
 
 	/*
@@ -70,7 +70,7 @@ public class Scanner {
 	  errori nel riconoscimento di un identificatore 
 		iv) identificatore seguito da numero.
 	 */
-	
+
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
 	public Token nextToken() throws LexicalException {	//ritorna (consumando) il prossimo token sullo stream 
@@ -113,25 +113,22 @@ public class Scanner {
 
 	//SCAN NUMBER	FINITA 
 	//(TODO: IMPLEMENTA LIMITE DECIMALI, IMPLEMENTA LETTURA POST ECCEZIONE)
-	
-	//ES: 89.999999999 VA TOKENIZZATO A 5 CIFRE DECIMALI? OPPURE LANCIATA EXCEPTION
-	//ES: 
-	
+
+	//ES: 89.999999999 VA TOKENIZZATO A 5 CIFRE DECIMALI? OPPURE LANCIATA EXCEPTION 
+
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
-		String numString = "";
-		Token token;
+
+		StringBuilder numString = new StringBuilder();
 		nextChar = readChar(); //valore di nextChar non cambia dal peeked ma avanzo
 
 		boolean decimalFlag = false;
-		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola = 5
+		//		int decimalCount = 5;	//TODO: da implementare, max cifre oltre la virgola = 5
 
 		while(numbers.contains(nextChar) || nextChar == '.') {
 			//gestione decimal point
 			if(nextChar == '.') {
-				if (decimalFlag) {
-									
-					//CONDIZIONE DA STABILIRE!!!!!! FIN DOVE CONSUMO L'INPUT??????
-					//risposta sul forum
+				if (decimalFlag) {						
+					// FIN DOVE CONSUMO L'INPUT?????? = risposta sul forum
 					while(numbers.contains(nextChar)) {
 						nextChar= readChar();
 					}
@@ -143,19 +140,20 @@ public class Scanner {
 			//check su cifra piu significativa = 0
 			char predict = peekChar(); //variabile di controllo
 			if (!(numString.length() == 0 && nextChar == '0' && predict != '.')) {
-				numString += nextChar;
+				numString.append(nextChar);
 			}			
 			nextChar = readChar();
 			predict = peekChar();
 		}
 		if(!decimalFlag) { 
-			if(numString == "") numString = "0";
-			token = new Token(TokenType.INT, line, numString);
+			if(numString.isEmpty()) numString.append(0);	//l'unico caso in cui la stringa è vuota è 00000
+			Token token = new Token(TokenType.INT, line, numString.toString());
+			return token;
 		}
 		else {
-			token = new Token(TokenType.FLOAT, line, numString);
+			Token token = new Token(TokenType.FLOAT, line, numString.toString());
+			return token;
 		}		 
-		return token;
 	}
 
 
@@ -166,11 +164,11 @@ public class Scanner {
 	// il Token associato Parola Chiave (per generare i Token per le
 	// parole chiave usate l'HaskMap di corrispondenza
 	//Se riconosce una KeyWord ritorna il token KEYWORD
-	
+
 	private Token scanId(char nextChar) throws IOException, LexicalException {
-		
+
 		StringBuilder idString = new StringBuilder(nextChar);	
-		
+
 		while(letters.contains(peekChar())) {
 			nextChar = readChar();
 			idString.append(nextChar);	
@@ -196,7 +194,6 @@ public class Scanner {
 
 	private Token scanOperator(char nextChar) throws IOException {
 		Token token;
-
 		//check per caratteri che sono necessariamente singoli
 		if (nextChar == '=' || nextChar == ';') {
 			token = new Token(operatorMap.get(nextChar), line);
