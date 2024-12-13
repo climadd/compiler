@@ -84,7 +84,13 @@ public class Scanner {
 	// NEXT TOKEN
 	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
 	public Token nextToken() throws LexicalException {	//ritorna (consumando) il prossimo token sullo stream 
-		if (nextTk != null) return nextTk;
+		if (nextTk != null) {
+			Token temp = nextTk;
+			nextTk = null;
+			return temp;
+			
+			
+		}
 		else {
 			try {	
 				char nextChar = peekChar();  //LA READ LA EFFETTUERò NEI METODI, OGNUNO LA GESTISCE IN AUTONOMIA
@@ -120,15 +126,12 @@ public class Scanner {
 				} 	
 			} catch (IOException e) {
 				throw new LexicalException("DA STABILIRE");
-			}
-			// TODO: aggiungi caso in cui setti nextTk a null		nextTk
+			}			
 		}
 	}
 
 	//SCAN NUMBER	FINITA 
-	//(TODO: IMPLEMENTA LIMITE DECIMALI, IMPLEMENTA LETTURA POST ECCEZIONE)
 
-	//ES: 89.999999999 VA LANCIATA EXCEPTION, non genero token
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
 
 		StringBuilder numString = new StringBuilder();
@@ -181,10 +184,6 @@ public class Scanner {
 			nextChar = readChar();
 			idString.append(nextChar);	
 		} 
-		//TODO: basandosi sul fatto che print2 è eccezione lessicale
-		if(numbers.contains(nextChar)) {
-			throw new LexicalException("Id contiene numeri");
-		}
 		if(keyWordsMap.containsKey(idString.toString())) {
 			Token token = new Token(keyWordsMap.get(idString.toString()) , line);
 			return token;
@@ -198,8 +197,6 @@ public class Scanner {
 
 
 	//SCAN OPERATOR		FINITA
-	//legge i caratteri che fanno parte di operatori e delimitatori
-
 	private Token scanOperator(char nextChar) throws IOException {
 		Token token;
 		//check per caratteri che sono necessariamente singoli

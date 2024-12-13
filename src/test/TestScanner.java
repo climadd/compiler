@@ -140,10 +140,10 @@ class TestScanner {
 			//89.999999
 			testFLOAT.nextToken();
 		});
-		
+
 		nextString = testFLOAT.nextToken().toString();
 		assertEquals("<FLOAT, r:6, 89.12345>",nextString);
-		
+
 		nextString = testFLOAT.nextToken().toString();
 		assertEquals("<FLOAT, r:7, 0006.123>",nextString);
 
@@ -165,27 +165,23 @@ class TestScanner {
 		assertEquals("<INT, r:1, 00>", nextString);
 
 		nextString = testErroriNumbers.nextToken().toString();	
-		System.out.println(nextString);
 		assertEquals("<INT, r:2, 123>", nextString);
 
 
 		nextString = testErroriNumbers.nextToken().toString();
-		System.out.println(nextString);
 		assertEquals("<ID, r:2, alieno>", nextString);
-		
+
 		nextString = testErroriNumbers.nextToken().toString();
-		System.out.println(nextString);
 		assertEquals("<FLOAT, r:3, 12.>", nextString);
-		
+
 		nextString = testErroriNumbers.nextToken().toString();
-		System.out.println(nextString);
 		assertEquals("<ID, r:3, a>", nextString);
-		
+
 		assertThrows(LexicalException.class, () -> {
 			//123.121212
 			testErroriNumbers.nextToken();		
 		});
-		
+
 	}
 
 	@Test
@@ -256,7 +252,7 @@ class TestScanner {
 		assertEquals("<INT, r:1, 3>", nextString);		
 		nextString = testErroriID.nextToken().toString();
 		assertEquals("<ID, r:1, printeremo>", nextString);
-		
+
 		nextString = testErroriID.nextToken().toString();
 		assertEquals("<ID, r:3, sprintf>", nextString);
 	}
@@ -285,7 +281,7 @@ class TestScanner {
 		assertEquals("<ID, r:4, b>", nextString);
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<SEMI, r:4>", nextString);
-		
+
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<ID, r:5, b>", nextString);
 		nextString = testGenerale.nextToken().toString();
@@ -298,7 +294,7 @@ class TestScanner {
 		assertEquals("<FLOAT, r:5, 3.2>", nextString);
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<SEMI, r:5>", nextString);
-		
+
 		nextString = testGenerale.nextToken().toString();
 		assertEquals("<PRINT, r:6>", nextString);
 		nextString = testGenerale.nextToken().toString();
@@ -314,9 +310,14 @@ class TestScanner {
 		assertEquals(testGenerale.peekToken().getType(), TokenType.TYINT);
 		assertEquals(testGenerale.peekToken().getType(), TokenType.TYINT);
 		assertEquals(testGenerale.nextToken().getType(), TokenType.TYINT);
-		//		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
-		//		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
-		//		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+		assertEquals(testGenerale.peekToken().getType(), TokenType.ID);
+		Token t = testGenerale.nextToken();
+		assertEquals(t.getType(), TokenType.ID);
+		assertEquals(t.getLine(), 1);
+		assertEquals(t.getValue(), "temp");
+
 	}
 
 	//	@Test
