@@ -86,7 +86,7 @@ public class Parser {
 
 	}
 
-	//5 TODO: 6
+	//5. 6
 	private void parseDclP() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
@@ -105,7 +105,7 @@ public class Parser {
 		default -> throw new SyntacticException("Issue in parseDclP");
 		}
 	}
-	//8 TODO: 7
+	//8.7
 	private void parseStm() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
