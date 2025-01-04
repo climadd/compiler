@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class NodeProgram extends NodeAST{
 
-	private ArrayList<NodeDecStm> decSts;
+	private ArrayList<NodeDecSt> decSts;
 	
-	public NodeProgram(ArrayList<NodeDecStm> decSts) {
+	public NodeProgram(ArrayList<NodeDecSt> decSts) {
 		this.decSts = decSts;
 	}
 	

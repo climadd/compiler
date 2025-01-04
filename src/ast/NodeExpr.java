@@ -1,5 +1,11 @@
 package ast;
 
-public abstract class NodeExpr extends NodeAST{
+abstract public class NodeExpr extends NodeAST{
 
+	public NodeExpr() {	
+	}
+	
+	public String toString() {
+		return("<NodeExpr>");
+	}
 }

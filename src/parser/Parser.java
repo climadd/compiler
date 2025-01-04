@@ -1,5 +1,8 @@
 package parser;
 
+import java.util.ArrayList;
+
+import ast.*;
 import scanner.LexicalException;
 import scanner.Scanner;
 import token.Token;
@@ -27,19 +30,21 @@ public class Parser {
 
 
 	//METODI PER PARSING
-	public void parse() throws SyntacticException, LexicalException {
-		this.parsePrg(); 
+	public NodeProgram parse() throws SyntacticException, LexicalException {
+		return this.parsePrg(); 
 	}
 
 	//0
-	private void parsePrg() throws SyntacticException, LexicalException {
+	private NodeProgram parsePrg() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
+		ArrayList<NodeDecSt> nodeDecSt;
+		
 		switch(token.getType()) {
-		case TYFLOAT, TYINT, ID, PRINT, EOF ->{		//Prg -> DSs $
-			parseDSs();
+		case TYFLOAT, TYINT, ID, PRINT, EOF ->{		//Prg -> DSs $		
+			nodeDecSt = parseDSs();
 			match(TokenType.EOF);
-			return;
+			return new NodeProgram(nodeDecSt);
 
 		}
 		default -> throw new SyntacticException("Issue in parsePrg");
@@ -47,39 +52,47 @@ public class Parser {
 	}
 
 	//1.2.3
-	private void parseDSs() throws SyntacticException, LexicalException {
+	private ArrayList<NodeDecSt> parseDSs() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
-
+		
+		NodeDecl nodeDecl;
+		ArrayList<NodeDecSt> nodeDecSt = new ArrayList<NodeDecSt>();
+		NodeStm nodeStm;
+		
 		switch(token.getType()) {
 		case TYFLOAT, TYINT ->{		//DSs -> Dcl DSs
-			parseDcl();
-			parseDSs();
-			return;
+			nodeDecl = parseDcl();
+			nodeDecSt = parseDSs();
+			nodeDecSt.add(0, nodeDecl);
+			return nodeDecSt;
 		}
 		case ID, PRINT ->{
-			parseStm();
-			parseDSs();
-			return;
+			nodeStm = parseStm();
+			nodeDecSt = parseDSs();
+			nodeDecSt.add(0,nodeStm);
+			return nodeDecSt;
 		}
 		case EOF -> {
-			return;
+			return new ArrayList<NodeDecSt>();
 		}
 		default -> throw new SyntacticException("Issue in parseDSs");
 		}
 	}
 
 	//4	
-	private void parseDcl() throws SyntacticException, LexicalException {
+	private NodeDecl parseDcl() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
-
+		
 		switch(token.getType()) {
 		case TYFLOAT, TYINT ->{
-			parseTy();
+			LangType type = parseTy();
 			match(TokenType.ID);
 			parseDclP();
-			return;
+			NodeId nodeId = new NodeId(match(TokenType.ID).getValue());
+			NodeExpr nodeInit = parseDclP();
+			return new NodeDecl(nodeId, type, nodeInit);
 		}
 		default -> throw new SyntacticException("Issue in parseDcl");
 		}
@@ -87,48 +100,54 @@ public class Parser {
 	}
 
 	//5. 6
-	private void parseDclP() throws SyntacticException, LexicalException {
+	private NodeExpr parseDclP() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
+	//	NodeExpr nodeExpr = new NodeExpr();
 		switch(token.getType()) {
 		case SEMI ->{
 			match(TokenType.SEMI);
-			return;
+			return null;
 		}
 		case ASSIGN ->{
 			match(TokenType.ASSIGN);
 			parseExp();
 			match(TokenType.SEMI);
-			return;
+			
+			//ritorna node expr 
+			return null;
 		}
 		default -> throw new SyntacticException("Issue in parseDclP");
 		}
 	}
 	//8.7
-	private void parseStm() throws SyntacticException, LexicalException {
+	private NodeStm parseStm() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
+		
+		NodePrint nodePrint;
+		NodeStm nodeStm = null;
 
 		switch(token.getType()) {
 		case PRINT ->{
 			match(TokenType.PRINT);
 			match(TokenType.ID);
 			match(TokenType.SEMI);
-			return;
+			return null;
 		}
 		case ID ->{
 			match(TokenType.ID);
 			parseOp();
 			parseExp();
 			match(TokenType.SEMI);
-			return;
+			return nodeStm;
 		}
 		default -> throw new SyntacticException("Issue in parseDclP");
 		}
 	}
 	//9
-	private void parseExp() throws SyntacticException, LexicalException {
+	private NodeExpr parseExp() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
@@ -136,13 +155,13 @@ public class Parser {
 		case ID, FLOAT, INT ->{
 			parseTr();
 			parseExpP();
-			return;
+			return null;
 		}				
 		default -> throw new SyntacticException("Issue in parseExp");
 		}
 	}
 	//10.11.12
-	private void parseExpP() throws SyntacticException, LexicalException {
+	private NodeExpr parseExpP() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
@@ -151,22 +170,22 @@ public class Parser {
 			match(TokenType.PLUS);
 			parseTr();
 			parseExpP();
-			return;
+			return null;
 		}
 		case MINUS ->{
 			match(TokenType.MINUS);
 			parseTr();
 			parseExpP();
-			return;
+			return null;
 		}
 		case SEMI ->{
-			return;
+			return null;
 		}
 		default -> throw new SyntacticException("Issue in parseExpP");
 		}
 	}
 	//13
-	private void parseTr() throws SyntacticException, LexicalException {
+	private NodeExpr parseTr() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
@@ -174,13 +193,13 @@ public class Parser {
 		case ID, FLOAT, INT ->{
 			parseVal();
 			parseTrP();
-			return;
+			return null;
 		}
 		default -> throw new SyntacticException("Issue in parseTr");
 		}
 	}
 	//14.15.16
-	private void parseTrP() throws SyntacticException, LexicalException {
+	private NodeExpr parseTrP() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
@@ -189,56 +208,56 @@ public class Parser {
 			match(TokenType.TIMES);
 			parseVal();
 			parseTrP();
-			return;
+			return null;
 		}
 		case DIVIDE ->{
 			match(TokenType.DIVIDE);
 			parseVal();
 			parseTrP();
-			return;
+			return null;
 		}
 		case MINUS, PLUS, SEMI ->{
-			return;
+			return null;
 		}
 		default -> throw new SyntacticException("Issue in parseTrP");
 		}
 	}
 
 	//17.18
-	private void parseTy() throws SyntacticException, LexicalException {
+	private LangType parseTy() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
 		switch(token.getType()) {
 		case TYFLOAT ->{
 			match(TokenType.TYFLOAT);
-			return;
+			return LangType.TYFLOAT;
 		}
 		case TYINT ->{
 			match(TokenType.TYINT);
-			return;
+			return LangType.TYINT;
 		}
 		default -> throw new SyntacticException("Issue in parseTy");
 		}
 	}
 	
 //19.20.21
-	private void parseVal() throws SyntacticException, LexicalException {
+	private NodeExpr parseVal() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
 		switch(token.getType()) {
 		case INT ->{
 			match(TokenType.INT);
-			return;
+			return null;
 		}
 		case FLOAT ->{
 			match(TokenType.FLOAT);
-			return;	
+			return null;	
 		}
 		case ID ->{
 			match(TokenType.ID);
-			return;
+			return null;
 		}
 		default -> throw new SyntacticException("Issue in parseVal");
 		}
