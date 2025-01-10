@@ -96,15 +96,14 @@ public class Parser {
 		}
 		default -> throw new SyntacticException("Issue in parseDcl");
 		}
-
 	}
 
 	//5. 6
 	private NodeExpr parseDclP() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
-
-	//	NodeExpr nodeExpr = new NodeExpr();
+		NodeExpr nodeExpr;
+		
 		switch(token.getType()) {
 		case SEMI ->{
 			match(TokenType.SEMI);
@@ -112,35 +111,37 @@ public class Parser {
 		}
 		case ASSIGN ->{
 			match(TokenType.ASSIGN);
-			parseExp();
-			match(TokenType.SEMI);
-			
-			//ritorna node expr 
-			return null;
+			nodeExpr = parseExp(); //ogni volta che faccio un parse restituisco un nodo
+			match(TokenType.SEMI);		 
+			return nodeExpr;
 		}
 		default -> throw new SyntacticException("Issue in parseDclP");
 		}
 	}
-	//8.7
+	
+	//7.8
 	private NodeStm parseStm() throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
-		
-		NodePrint nodePrint;
-		NodeStm nodeStm = null;
 
+		NodeStm nodeStm;
+		NodeId nodeId;
+		
 		switch(token.getType()) {
 		case PRINT ->{
 			match(TokenType.PRINT);
-			match(TokenType.ID);
+			nodeId = new NodeId(match(TokenType.ID).getValue());
 			match(TokenType.SEMI);
-			return null;
+			NodePrint nodePrint = new NodePrint(nodeId);
+			NodeAssign nodeAssign = new NodeAssign(nodeId, nodeExpr);
+			return nodeAssign;
 		}
 		case ID ->{
-			match(TokenType.ID);
+			nodeId = new NodeId(match(TokenType.ID).getValue());
 			parseOp();
 			parseExp();
 			match(TokenType.SEMI);
+			
 			return nodeStm;
 		}
 		default -> throw new SyntacticException("Issue in parseDclP");
