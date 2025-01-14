@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeDeref {
+public class NodeDeref extends NodeExpr{
 
 	private NodeId id;
 	

@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeBinOp {
+public class NodeBinOp extends NodeExpr{
 
 	private LangOper op;
 	private NodeExpr left;

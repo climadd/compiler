@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeAssign {
+public class NodeAssign extends NodeStm{
 
 	private NodeId id;
 	private NodeExpr expr;
