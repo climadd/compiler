@@ -19,6 +19,8 @@ public class Parser {
 
 
 	//MATCH
+	//necessario per capire in che branch delle regole grammaticali proseguire
+	
 	private Token match(TokenType type) throws LexicalException, SyntacticException {
 		Token tk =scanner.peekToken();
 
@@ -127,23 +129,25 @@ public class Parser {
 		NodePrint nodePrint;
 		NodeStm nodeStm;
 		NodeId nodeId;
+		NodeAssign nodeAssign;
+		
 		
 		switch(token.getType()) {
+		case ID ->{
+			nodeId = new NodeId(match(TokenType.ID).getValue());
+			parseOp();
+			//NODEEXPR è ASTRATTO, DEVO METTERE NODEBINOP
+			nodeExpr = parseExp();
+			match(TokenType.SEMI);
+			nodeAssign = new NodeAssign(nodeId, nodeExpr);
+			return nodeAssign;
+		}	
 		case PRINT ->{
 			match(TokenType.PRINT);
 			nodeId = new NodeId(match(TokenType.ID).getValue());
 			match(TokenType.SEMI);
 			nodePrint = new NodePrint(nodeId);
-			NodeAssign nodeAssign = new NodeAssign(nodeId, nodeExpr);
-			return nodeAssign;
-		}
-		case ID ->{
-			nodeId = new NodeId(match(TokenType.ID).getValue());
-			parseOp();
-			parseExp();
-			match(TokenType.SEMI);
-			
-			return nodeStm;
+			return nodePrint;
 		}
 		default -> throw new SyntacticException("Issue in parseDclP");
 		}
