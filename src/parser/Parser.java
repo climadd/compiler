@@ -124,6 +124,7 @@ public class Parser {
 		Token token;
 		token = this.scanner.peekToken();
 
+		NodePrint nodePrint;
 		NodeStm nodeStm;
 		NodeId nodeId;
 		
@@ -132,7 +133,7 @@ public class Parser {
 			match(TokenType.PRINT);
 			nodeId = new NodeId(match(TokenType.ID).getValue());
 			match(TokenType.SEMI);
-			NodePrint nodePrint = new NodePrint(nodeId);
+			nodePrint = new NodePrint(nodeId);
 			NodeAssign nodeAssign = new NodeAssign(nodeId, nodeExpr);
 			return nodeAssign;
 		}
