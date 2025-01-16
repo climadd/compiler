@@ -45,7 +45,7 @@ public class TestParser {
 
 	@Test
 	public void testParserEccezione() throws FileNotFoundException, LexicalException, SyntacticException {
-		
+
 		Scanner scanExc0 = new Scanner(path + "testParserEcc_0.txt");
 		Parser parseExc0 = new Parser(scanExc0);
 		assertThrows(parser.SyntacticException.class, () -> 
@@ -94,7 +94,7 @@ public class TestParser {
 		parseExc7.parse()
 				);
 	}
-	
+
 	@Test
 	public void testSoloFiles() throws FileNotFoundException {
 		Scanner scanSoloDich = new Scanner(path + "testSoloDich.txt");
@@ -102,7 +102,7 @@ public class TestParser {
 		assertDoesNotThrow(() -> 
 		parseSoloDich.parse()		
 				);
-		
+
 		Scanner scanSoloDichPrint = new Scanner(path + "testSoloDichPrint.txt");
 		Parser parseSoloDichPrint = new Parser(scanSoloDichPrint);
 		assertDoesNotThrow(() -> 

@@ -88,8 +88,8 @@ public class Scanner {
 			Token temp = nextTk;
 			nextTk = null;
 			return temp;
-			
-			
+
+
 		}
 		else {
 			try {	

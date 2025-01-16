@@ -135,7 +135,7 @@ public class Parser {
 		case ID -> {
 			nodeId = new NodeId(match(TokenType.ID).getValue());
 			Token op = parseOp();
-			
+
 			//dal parseOp ricavo il tipo di assegnamento per capire
 			if(op.getType()== TokenType.OP_ASSIGN) {
 				//x +=3 deve essere costruito sull'AST come x = x + 3
