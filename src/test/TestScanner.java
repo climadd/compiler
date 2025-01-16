@@ -147,9 +147,9 @@ class TestScanner {
 		nextString = testFLOAT.nextToken().toString();
 		assertEquals("<FLOAT, r:7, 0006.123>",nextString);
 
-		assertThrows(LexicalException.class, () -> {
-			testFLOAT.nextToken();
-		});
+		assertThrows(LexicalException.class, () -> 
+			testFLOAT.nextToken()
+		);
 
 		nextString = testFLOAT.nextToken().toString();
 		assertEquals("<INT, r:9, 13>", nextString);

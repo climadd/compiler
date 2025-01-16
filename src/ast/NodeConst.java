@@ -1,6 +1,6 @@
 package ast;
 
-public class NodeConst {
+public class NodeConst extends NodeExpr{
 
 	private String value;
 	private LangType type;

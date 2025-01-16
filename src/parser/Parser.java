@@ -17,6 +17,7 @@ public class Parser {
 		this.scanner = scanner;
 	}
 
+	//TODO: tutti gli errori lessicali vanno catchati
 
 	//MATCH
 	//necessario per capire in che branch delle regole grammaticali proseguire
@@ -24,8 +25,10 @@ public class Parser {
 	private Token match(TokenType type) throws LexicalException, SyntacticException {
 		Token tk =scanner.peekToken();
 
-		if(type.equals(tk.getType())) 
+		if(type.equals(tk.getType())) {
+			System.out.println(tk);		 // per debug
 			return scanner.nextToken();
+		}
 		else 
 			throw new SyntacticException("TokenType Mismatch! peeked:" + tk.getType().toString() + "  parameter: " + type.toString() + " at line " + tk.getLine());
 	}
@@ -33,13 +36,13 @@ public class Parser {
 
 	//METODI PER PARSING
 	public NodeProgram parse() throws SyntacticException, LexicalException {
-		return this.parsePrg(); 
+		return this.parsePrg();
 	}
 
 	//0
 	private NodeProgram parsePrg() throws SyntacticException, LexicalException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = this.scanner.peekToken();	
 		ArrayList<NodeDecSt> nodeDecSt;
 
 		switch(token.getType()) {
@@ -49,7 +52,7 @@ public class Parser {
 			return new NodeProgram(nodeDecSt);
 
 		}
-		default -> throw new SyntacticException("Issue in parsePrg");
+		default -> throw new SyntacticException("Issue in parsePrga riga " + token.getLine());
 		}
 	}
 
@@ -76,9 +79,9 @@ public class Parser {
 			return nodeDecSt;
 		}
 		case EOF -> {
-			return new ArrayList<NodeDecSt>();
+			return nodeDecSt;
 		}
-		default -> throw new SyntacticException("Issue in parseDSs");
+		default -> throw new SyntacticException("Issue in parseDSs a riga " + token.getLine());
 		}
 	}
 
@@ -90,13 +93,13 @@ public class Parser {
 		switch(token.getType()) {
 		case TYFLOAT, TYINT ->{
 			LangType type = parseTy();
-			match(TokenType.ID);
-			parseDclP();
-			NodeId nodeId = new NodeId(match(TokenType.ID).getValue());
+			Token tk = match(TokenType.ID);
 			NodeExpr nodeInit = parseDclP();
+			NodeId nodeId = new NodeId(tk.getValue());
+
 			return new NodeDecl(nodeId, type, nodeInit);
 		}
-		default -> throw new SyntacticException("Issue in parseDcl");
+		default -> throw new SyntacticException("Issue in parseDcl a riga " + token.getLine());
 		}
 	}
 
@@ -117,7 +120,7 @@ public class Parser {
 			match(TokenType.SEMI);		 
 			return nodeExpr;
 		}
-		default -> throw new SyntacticException("Issue in parseDclP");
+		default -> throw new SyntacticException("Issue in parseDclPa riga " + token.getLine());
 		}
 	}
 
@@ -132,6 +135,7 @@ public class Parser {
 		case ID -> {
 			nodeId = new NodeId(match(TokenType.ID).getValue());
 			Token op = parseOp();
+			
 			//dal parseOp ricavo il tipo di assegnamento per capire
 			if(op.getType()== TokenType.OP_ASSIGN) {
 				//x +=3 deve essere costruito sull'AST come x = x + 3
@@ -150,9 +154,10 @@ public class Parser {
 				case "/=" -> {
 					type = LangOper.DIVIDE;
 				}
-				default -> throw new SyntacticException("Issue in ");
+				default -> throw new SyntacticException("Issue in composite operator switch in parseStm a riga " + token.getLine());
 				}
 				NodeBinOp nodeBinOp = new NodeBinOp(type, nodeDeref, parseExp());
+				match(TokenType.SEMI);
 				return new NodeAssign(nodeId, nodeBinOp);
 			}
 			//sono nel caso base operatore non  composito ->(parseExp gestisce tutto)
@@ -168,10 +173,10 @@ public class Parser {
 			NodePrint nodePrint = new NodePrint(nodeId);
 			return nodePrint;
 		}
-		default -> throw new SyntacticException("Issue in parseDclP");
+		default -> throw new SyntacticException("Issue in parseDclP a riga " + token.getLine());
 		}
 	}
-	
+
 	//9
 	private NodeExpr parseExp() throws SyntacticException, LexicalException {
 		Token token;
@@ -183,34 +188,34 @@ public class Parser {
 			NodeExpr full = parseExpP(left);
 			return full;
 		}				
-		default -> throw new SyntacticException("Issue in parseExp");
+		default -> throw new SyntacticException("Issue in parseExp a riga " + token.getLine());
 		}
 	}
 	//10.11.12
-	private NodeExpr parseExpP(NodeExpr left) throws SyntacticException, LexicalException {
+	private NodeExpr parseExpP(NodeExpr nodeExpr) throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
 
 		NodeExpr exp;
 		NodeExpr expP;
-		
+
 		switch(token.getType()) {
 		case PLUS ->{
 			match(TokenType.PLUS);
 			exp = parseTr();
 			expP = parseExpP(exp);
-			return new NodeBinOp(LangOper.PLUS, left, expP);
+			return new NodeBinOp(LangOper.PLUS, nodeExpr, expP);
 		}
 		case MINUS ->{
 			match(TokenType.MINUS);
 			exp = parseTr();
 			expP = parseExpP(exp);
-			return new NodeBinOp(LangOper.MINUS, left, expP);
+			return new NodeBinOp(LangOper.MINUS, nodeExpr, expP);
 		}
 		case SEMI ->{
-			return left;
+			return nodeExpr;
 		}
-		default -> throw new SyntacticException("Issue in parseExpP");
+		default -> throw new SyntacticException("Issue in parseExpP a riga " + token.getLine());
 		}
 	}
 	//13
@@ -218,37 +223,43 @@ public class Parser {
 		Token token;
 		token = this.scanner.peekToken();
 
+		NodeExpr exp1;
+		NodeExpr exp2;
+
 		switch(token.getType()) {
 		case ID, FLOAT, INT ->{
-			parseVal();
-			parseTrP();
-			return null;
+			exp1 = parseVal();
+			exp2 = parseTrP(exp1);
+			return exp2;
 		}
-		default -> throw new SyntacticException("Issue in parseTr");
+		default -> throw new SyntacticException("Issue in parseTr a riga " + token.getLine());
 		}
 	}
 	//14.15.16
-	private NodeExpr parseTrP() throws SyntacticException, LexicalException {
+	private NodeExpr parseTrP(NodeExpr nodeExpr) throws SyntacticException, LexicalException {
 		Token token;
 		token = this.scanner.peekToken();
+
+		NodeExpr exp;
+		NodeExpr expP;
 
 		switch(token.getType()) {
 		case TIMES ->{
 			match(TokenType.TIMES);
-			parseVal();
-			parseTrP();
-			return null;
+			exp = parseVal();
+			expP = parseTrP(exp);
+			return new NodeBinOp(LangOper.TIMES, nodeExpr, expP);
 		}
 		case DIVIDE ->{
 			match(TokenType.DIVIDE);
-			parseVal();
-			parseTrP();
-			return null;
+			exp = parseVal();
+			expP = parseTrP(exp);
+			return new NodeBinOp(LangOper.DIVIDE, nodeExpr, expP);
 		}
 		case MINUS, PLUS, SEMI ->{
-			return null;
+			return nodeExpr;
 		}
-		default -> throw new SyntacticException("Issue in parseTrP");
+		default -> throw new SyntacticException("Issue in parseTrP a riga " + token.getLine());
 		}
 	}
 
@@ -266,7 +277,7 @@ public class Parser {
 			match(TokenType.TYINT);
 			return LangType.TYINT;
 		}
-		default -> throw new SyntacticException("Issue in parseTy");
+		default -> throw new SyntacticException("Issue in parseTy a riga " + token.getLine());
 		}
 	}
 
@@ -275,20 +286,23 @@ public class Parser {
 		Token token;
 		token = this.scanner.peekToken();
 
+		String value;
+		String id;
+
 		switch(token.getType()) {
 		case INT ->{
-			match(TokenType.INT);
-			return null;
+			value = match(TokenType.INT).getValue();
+			return new NodeConst(value, LangType.TYINT);
 		}
 		case FLOAT ->{
-			match(TokenType.FLOAT);
-			return null;	
+			value = match(TokenType.FLOAT).getValue();
+			return new NodeConst(value, LangType.TYFLOAT);	
 		}
 		case ID ->{
-			match(TokenType.ID);
-			return null;
+			id = match(TokenType.ID).getValue();
+			return new NodeDeref(new NodeId(id));
 		}
-		default -> throw new SyntacticException("Issue in parseVal");
+		default -> throw new SyntacticException("Issue in parseVal a riga " + token.getLine());
 		}
 	}
 
@@ -307,7 +321,7 @@ public class Parser {
 			op = match(TokenType.OP_ASSIGN);
 			return op;
 		}
-		default ->throw new SyntacticException("Issue in parseOp");
+		default ->throw new SyntacticException("Issue in parseOp a riga " + token.getLine());
 		}
 	}
 
