@@ -11,6 +11,8 @@ import ast.NodeProgram;
 
 public class TypeCheckingVisitor implements IVisitor{
 
+	private TypeDescriptor resType; // mantiene il risultato della visita
+
 	@Override
 	public void visit(NodeProgram node) {
 		// TODO Auto-generated method stub
@@ -37,7 +39,13 @@ public class TypeCheckingVisitor implements IVisitor{
 
 	@Override
 	public void visit(NodeBinOp node) {
-		// TODO Auto-generated method stub
+//		node.getLeft().accept(this);
+//		TypeDescriptor leftTD = resType;
+//		node.getRight().accept(this);
+//		TypeDescriptor rightTD = resType;
+//		if ( ......... ) / /controlli opportuni su leftTD e rightTD
+//		......................
+//		resType = ..... // assegna il TypeDescriptor appropriato
 		
 	}
 

@@ -11,6 +11,8 @@ import ast.NodeProgram;
 
 public class CodeGenerationVisitor implements IVisitor{
 
+	private String codiceDc; // mantiene il codice della visita
+	
 	@Override
 	public void visit(NodeProgram node) {
 		// TODO Auto-generated method stub
@@ -43,7 +45,12 @@ public class CodeGenerationVisitor implements IVisitor{
 
 	@Override
 	public void visit(NodeDecl node) {
-		// TODO Auto-generated method stub
+//		node.getLeft().accept(this);
+//		String leftCodice = codiceDc;
+//		node.getRight().accept(this);
+//		String rightCodice = codiceDc;
+//		if ( ......... ) / /controlli di errore
+//		codiceDc = .......... //codice dell’espressione binaria
 		
 	}
 
