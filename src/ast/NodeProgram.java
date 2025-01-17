@@ -8,10 +8,17 @@ public class NodeProgram extends NodeAST{
 
 	private ArrayList<NodeDecSt> decSts;
 	
+	//costruttore
 	public NodeProgram(ArrayList<NodeDecSt> decSts) {
 		this.decSts = decSts;
 	}
 	
+	//getter
+	public ArrayList<NodeDecSt> getDecSts(){
+		return this.decSts;
+	}
+	
+	//toString
 	public String toString() {
 		return("NodeProgram <" + ">");
 	}

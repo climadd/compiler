@@ -10,6 +10,11 @@ public class NodePrint extends NodeStm{
 		this.id = id;
 	}
 	
+	//getter
+	public NodeId getId() {
+		return this.id;
+	}
+	//toString
 	public String toString() {
 		return("NodePrint <" + ">");
 	}

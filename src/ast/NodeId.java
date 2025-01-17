@@ -6,10 +6,17 @@ public class NodeId extends NodeAST{
 
 	private String name;
 	
+	//constructor
 	public NodeId(String name) {
 		this.name = name;
 	}
 	
+	//getter
+	public String getName() {
+		return this.name;
+	}
+	
+	//toString
 	public String toString() {
 		return("NodeId <name : " + name + ">");
 	}

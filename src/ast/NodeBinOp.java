@@ -8,12 +8,27 @@ public class NodeBinOp extends NodeExpr{
 	private NodeExpr left;
 	private NodeExpr right;
 	
+	//costruttore
 	public  NodeBinOp (LangOper op, NodeExpr left, NodeExpr right) {
 		this.op = op;
 		this.left = left;
 		this.right = right;
 	}
 	
+	//getters
+	public LangOper getOp() {
+		return this.op;
+	}
+	
+	public NodeExpr getLeft() {
+		return this.left;
+	}
+	
+	public NodeExpr getRight() {
+		return this.right;
+	}
+	
+	//toString
 	public String toString() {
 		return("NodeBinOp <" + ">");
 	}

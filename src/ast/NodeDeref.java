@@ -6,10 +6,17 @@ public class NodeDeref extends NodeExpr{
 
 	private NodeId id;
 	
+	//constructor
 	public NodeDeref(NodeId id) {
 		this.id = id;
 	}
 	
+	//getter
+	public NodeId getId() {
+		return this.id;
+	}
+	
+	//toString
 	public String toString() {
 		return("NodeDeref <" + ">");
 	}

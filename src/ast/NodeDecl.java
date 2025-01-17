@@ -8,12 +8,27 @@ public class NodeDecl extends NodeDecSt{
 	private LangType type;
 	private NodeExpr init;
 	
+	//constructor
 	public NodeDecl(NodeId id, LangType type, NodeExpr init) {
 		this.id = id;
 		this.type = type;
 		this.init = init;
 	}
 	
+	//getters
+	public NodeId getId() {
+		return this.id;
+	}
+	
+	public LangType getType() {
+		return this.type;
+	}
+	
+	public NodeExpr getInit() {
+		return this.init;
+	}
+	
+	//toString
 	public String toString() {
 		return("NodeDecl <" + ">");
 	}
