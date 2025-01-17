@@ -1,8 +1,11 @@
 package visitor;
 
+import java.util.ArrayList;
+
 import ast.NodeAssign;
 import ast.NodeBinOp;
 import ast.NodeConst;
+import ast.NodeDecSt;
 import ast.NodeDecl;
 import ast.NodeDeref;
 import ast.NodeId;
@@ -15,7 +18,7 @@ public class TypeCheckingVisitor implements IVisitor{
 
 	@Override
 	public void visit(NodeProgram node) {
-		// TODO Auto-generated method stub
+		ArrayList<NodeDecSt> list =node.getDecSts();
 		
 	}
 
@@ -39,14 +42,13 @@ public class TypeCheckingVisitor implements IVisitor{
 
 	@Override
 	public void visit(NodeBinOp node) {
-//		node.getLeft().accept(this);
-//		TypeDescriptor leftTD = resType;
-//		node.getRight().accept(this);
-//		TypeDescriptor rightTD = resType;
+		node.getLeft().accept(this);
+		TypeDescriptor leftTD = resType;
+		node.getRight().accept(this);
+		TypeDescriptor rightTD = resType;
 //		if ( ......... ) / /controlli opportuni su leftTD e rightTD
 //		......................
 //		resType = ..... // assegna il TypeDescriptor appropriato
-		
 	}
 
 	@Override

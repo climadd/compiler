@@ -35,7 +35,11 @@ public class SymbolTable {
 	}
 
 	public static String toStr() {
-		return symbolTableMap.toString();
+		String string = "";
+		for(String key : symbolTableMap.keySet()) {
+			string += key;
+		}
+		return string;
 	}
 
 	public static int size() {
