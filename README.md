@@ -1,5 +1,5 @@
 # AcDc Compiler
-The compilation process is divided into four phases: 
+The compilation process is divided into four phases:<br>
     **Lexical Analysis**, to tokenize the input;<br>
     **Syntactic Analysis**, to parse the tokens and construct an **Abstract Syntax Tree** (AST);<br>
     **Semantic Analysis**,which includes type checking to ensure correctness;<br>
