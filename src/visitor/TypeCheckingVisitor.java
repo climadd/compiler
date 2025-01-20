@@ -11,11 +11,22 @@ import ast.NodeDeref;
 import ast.NodeId;
 import ast.NodePrint;
 import ast.NodeProgram;
+import symbolTable.SymbolTable;
+import typeChecking.TypeDescriptor;
 
 public class TypeCheckingVisitor implements IVisitor{
 
-	private TypeDescriptor resType; // mantiene il risultato della visita
+	private TypeDescriptor resultType; // mantiene il risultato della visita
 
+	public TypeCheckingVisitor() {
+		super();
+		SymbolTable.init();
+	}
+	
+	public TypeDescriptor getResultType() {
+		return resultType;
+	}
+	
 	@Override
 	public void visit(NodeProgram node) {
 		ArrayList<NodeDecSt> list =node.getDecSts();
@@ -43,9 +54,9 @@ public class TypeCheckingVisitor implements IVisitor{
 	@Override
 	public void visit(NodeBinOp node) {
 		node.getLeft().accept(this);
-		TypeDescriptor leftTD = resType;
+		TypeDescriptor leftTD = resultType;
 		node.getRight().accept(this);
-		TypeDescriptor rightTD = resType;
+		TypeDescriptor rightTD = resultType;
 //		if ( ......... ) / /controlli opportuni su leftTD e rightTD
 //		......................
 //		resType = ..... // assegna il TypeDescriptor appropriato

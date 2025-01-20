@@ -1,11 +1,8 @@
-package visitor;
+package typeChecking;
 
 public class TypeDescriptor {
 
 	/*
-	 * O una classe astratta con figli che la estendono (Errore/ IntTypeDescr, FloatType....)
-	 * O una classe regolare con attributo enum in base al tipo.
-	 * 
   		una classe TypeDescriptor che deve
 		*se non ci sono errori di tipo* dire se il tipo è intero, float, oppure void 
 		(che usiamo per dichiarazioni e istruzioni corrette)
@@ -14,4 +11,8 @@ public class TypeDescriptor {
 		sarà anche necessario definire un "metodo per la compatibilità" da usare
 		nell’analisi dell’assegnamento e delle dichiarazioni con inizializzazione.
 	 */
+	
+	
+	private DescriptorEnumType type;
+
 }
