@@ -1,9 +1,9 @@
 # AcDc Compiler
 The compilation process is divided into four phases: 
-    **Lexical Analysis**, to tokenize the input;
-    **Syntactic Analysis**, to parse the tokens and construct an **Abstract Syntax Tree** (AST);
-    **Semantic Analysis**,which includes type checking to ensure correctness;
-    **Code Generation**, where the AST is transformed into Dc code.
+    **Lexical Analysis**, to tokenize the input;<br>
+    **Syntactic Analysis**, to parse the tokens and construct an **Abstract Syntax Tree** (AST);<br>
+    **Semantic Analysis**,which includes type checking to ensure correctness;<br>
+    **Code Generation**, where the AST is transformed into Dc code.<br>
 
 ## Source Language: Ac
 * 2 Data types: int and float.
