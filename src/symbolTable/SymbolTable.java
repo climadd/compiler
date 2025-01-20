@@ -10,8 +10,24 @@ public class SymbolTable {
 
 	public static class Attributes{
 		private LangType type;
-
-
+		private char register;
+		
+		public Attributes(LangType type) {
+			this.type = type;
+		}
+		
+		public Attributes(LangType type, char register) {
+			this.type = type;
+			this.register = register;
+		}
+		
+		public LangType getType() {
+			return this.type;
+		}
+		
+		public char getRegister() {
+			return this.register;
+		}
 	}
 
 
@@ -35,11 +51,11 @@ public class SymbolTable {
 	}
 
 	public static String toStr() {
-		String string = "";
+		StringBuilder string = new StringBuilder("");
 		for(String key : symbolTableMap.keySet()) {
-			string += key;
+			string.append(key + ": " + symbolTableMap.get(key) + " | ");	
 		}
-		return string;
+		return string.toString();
 	}
 
 	public static int size() {
