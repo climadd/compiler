@@ -1,6 +1,6 @@
 package typeChecking;
 
-public enum DescriptorEnumType {
+public enum DescEnumType {
 
 	INT,
 	FLOAT,
