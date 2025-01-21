@@ -4,6 +4,6 @@ public enum DescEnumType {
 
 	INT,
 	FLOAT,
-	SUCCESS,
+	VOID,
 	ERROR
 }

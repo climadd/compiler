@@ -12,15 +12,18 @@ public class SymbolTable {
 		private LangType type;
 		private char register;
 		
+		//Inner Class
 		public Attributes(LangType type) {
 			this.type = type;
 		}
 		
+		//constructors
 		public Attributes(LangType type, char register) {
 			this.type = type;
 			this.register = register;
 		}
 		
+		//getters
 		public LangType getType() {
 			return this.type;
 		}
@@ -35,6 +38,7 @@ public class SymbolTable {
 		symbolTableMap = new HashMap<String, Attributes>();
 	}
 
+	// inserisce il nome con l’informazione sulla dichiarazione 
 	public static boolean enter(String id, Attributes entry) {
 		if(!symbolTableMap.containsKey(id)) {
 			symbolTableMap.put(id, entry);
@@ -43,6 +47,8 @@ public class SymbolTable {
 		else return false;	
 	}
 
+	// serve a controllare se la variabile di parametro è  presente nella symbol table, 
+	// quindi anche inizializzata correttamente
 	public static Attributes lookup(String id) {
 		if(symbolTableMap.containsKey(id)) {
 			return symbolTableMap.get(id);

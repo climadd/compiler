@@ -18,8 +18,8 @@ import typeChecking.TypeDescriptor;
 
 public class TypeCheckingVisitor implements IVisitor{
 
-	private TypeDescriptor resultType; // mantiene il risultato della visita
-	private String errorMsg = "";
+	private TypeDescriptor resultType; //mantiene il risultato dell'ultimo nodo visitato
+	private String errorMsg = ""; //accumula messaggi di errore
 
 	//initialization
 	public TypeCheckingVisitor() {
@@ -31,14 +31,12 @@ public class TypeCheckingVisitor implements IVisitor{
 		return resultType;
 	}
 
-	//METODI PER VISITA
-	
+	//METODI PER VISITA	
 	@Override
 	public void visit(NodeProgram node) {
 		for (NodeDecSt decSt : node.getDecSts()) {
 			decSt.accept(this);
 		}
-
 	}
 
 	@Override	//fatto
@@ -47,7 +45,7 @@ public class TypeCheckingVisitor implements IVisitor{
 		Attributes type = SymbolTable.lookup(id);
 		if(type != null) {
 			switch(type.getType()) {
-			case TYINT -> resultType = new TypeDescriptor(DescEnumType.SUCCESS);
+			case TYINT -> resultType = new TypeDescriptor(DescEnumType.INT);
 			case TYFLOAT -> resultType = new TypeDescriptor(DescEnumType.FLOAT);
 			}
 		} else {
@@ -55,7 +53,6 @@ public class TypeCheckingVisitor implements IVisitor{
 			resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
 			return;
 		}
-
 	}
 
 	@Override	//fatto
@@ -65,7 +62,6 @@ public class TypeCheckingVisitor implements IVisitor{
 		case TYINT -> resultType = new TypeDescriptor(DescEnumType.INT);
 		case TYFLOAT -> resultType = new TypeDescriptor(DescEnumType.FLOAT);
 		}
-
 	}
 
 	@Override	//fatto
@@ -97,7 +93,8 @@ public class TypeCheckingVisitor implements IVisitor{
 			}
 		}
 		else {
-			// TODO: COSA DEVO FARE QUANDO LEFT E RIGHT NON MATCHANO?
+			// SE SONO MISTI IL RESULT SARà FLOAT per forza
+
 		}
 	}
 
@@ -105,26 +102,45 @@ public class TypeCheckingVisitor implements IVisitor{
 	public void visit(NodeDecl node) {
 		String id = node.getId().getName();
 		Attributes entry = new Attributes(node.getType());
-		
-		
-		
-		
+
+
+
+
+
 	}
 
-	@Override
+	@Override	//fatto
 	public void visit(NodeAssign node) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(NodePrint node) {
 		node.getId().accept(this);
-		
-		if(resultType.getType() != DescEnumType.ERROR) {
-			resultType = new TypeDescriptor(DescEnumType.SUCCESS);
-		}
+		TypeDescriptor id = resultType;
+		node.getExpr().accept(this);
+		TypeDescriptor expr = resultType;
 
+		if (id.getType() == DescEnumType.ERROR) {
+			resultType = id;
+			return;
+		}
+		if (expr.getType() == DescEnumType.ERROR) {
+			resultType = expr;
+			return;
+		}
+		else {
+			if (id.isCompatible(expr)){
+				resultType = new TypeDescriptor(DescEnumType.VOID);
+			}
+			else {
+				errorMsg += "unable to assign a float value to " + node.getId().getName() + " variable.";
+				resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
+				return;
+			}
+		}
 	}
 
+	@Override	//FINITO
+	public void visit(NodePrint node) {
+		node.getId().accept(this);	
+		if(resultType.getType() != DescEnumType.ERROR) {
+			resultType = new TypeDescriptor(DescEnumType.VOID);
+		}
+	}
 }
