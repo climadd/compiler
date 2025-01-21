@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import parser.Parser;
 import parser.SyntacticException;
-import scanner.LexicalException;
 import scanner.Scanner;
 
 public class TestParser {
@@ -17,7 +16,7 @@ public class TestParser {
 	private String 	path = "./src/test/data/testParser/";
 
 	@Test
-	public void testParser() throws SyntacticException, LexicalException, FileNotFoundException {
+	public void testParser() throws SyntacticException, FileNotFoundException {
 		Scanner scanPrimo = new Scanner(path + "primo.txt");
 		Parser parsePrimo = new Parser(scanPrimo);
 
@@ -44,7 +43,7 @@ public class TestParser {
 	}
 
 	@Test
-	public void testParserEccezione() throws FileNotFoundException, LexicalException, SyntacticException {
+	public void testParserEccezione() throws FileNotFoundException, SyntacticException {
 
 		Scanner scanExc0 = new Scanner(path + "testParserEcc_0.txt");
 		Parser parseExc0 = new Parser(scanExc0);
@@ -71,7 +70,7 @@ public class TestParser {
 				);
 
 		Scanner scanExc4 = new Scanner(path + "testParserEcc_4.txt");
-		Parser parseExc4 = new Parser(scanExc0);
+		Parser parseExc4 = new Parser(scanExc4);
 		assertThrows(SyntacticException.class,() ->
 		parseExc4.parse()
 				);

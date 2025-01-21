@@ -3,46 +3,93 @@ package parser;
 import java.util.ArrayList;
 
 import ast.*;
+import parser.SyntacticException.SyntaxErrorWrapper;
 import scanner.LexicalException;
 import scanner.Scanner;
 import token.Token;
 import token.TokenType;
 
+
+/**
+ * A parser for constructing an Abstract Syntax Tree (AST) from a sequence of tokens.
+ * The class implements a parser based on the grammar rules of the language. (src/resources/ParseTable.png)
+ * It validates the syntactic structure of the input while constructing Nodes in the process.
+ * 
+ * @author Lorenzo Mirto Bertoldo (github.com/climadd)
+ */
 public class Parser {
 
 	private Scanner scanner;
 
-	//costruttore
+    /**
+     * Constructor of a Parser object for the given file.
+     *
+     * @param the Scanner object used to tokenize the input.
+     */
 	public Parser (Scanner scanner) {
 		this.scanner = scanner;
 	}
 
-	//TODO: tutti gli errori lessicali vanno catchati
-
-	//MATCH
-	//necessario per capire in che branch delle regole grammaticali proseguire
-
-	private Token match(TokenType type) throws LexicalException, SyntacticException {
-		Token tk =scanner.peekToken();
+    /**
+     * Wraps every Scanner-defined method in order to handle SyntacticExceptions separately.
+     * in this case .peekToken() and .nextToken()
+     *
+     * @param action<T> which represent the method that's gonna be called
+     * @return the result of executing the scanner action.
+     * @throws SyntacticException if such exception is thrown during execution.
+     */
+    private <T> T wrapScanner(SyntaxErrorWrapper<T> action) throws SyntacticException {
+        try {
+            return action.execute();
+        } catch (LexicalException e) {
+            throw new SyntacticException("Lexical error occurred: " + e.getMessage());
+        }
+    }	
+	
+	
+	//MATCH  
+    /**
+    * Matches the next token in the input stream, with its expected TokenType.
+    * If the next token matches the expected type, it gets consumed and is returned.
+    *
+    * @param type the expected TokenType.
+    * @return the correctly matched Token.
+    * @throws SyntacticException if the next token does not match the expected type.
+    */
+	private Token match(TokenType type) throws  SyntacticException {
+		Token tk = wrapScanner(scanner::peekToken);
 
 		if(type.equals(tk.getType())) {
 			System.out.println(tk);		 // per debug
-			return scanner.nextToken();
+			return wrapScanner(scanner::nextToken);
 		}
 		else 
 			throw new SyntacticException("TokenType Mismatch! peeked:" + tk.getType().toString() + "  parameter: " + type.toString() + " at line " + tk.getLine());
 	}
 
 
-	//METODI PER PARSING
-	public NodeProgram parse() throws SyntacticException, LexicalException {
+	//PARSING METHODS
+    /**
+     * Entry point for the parsing process. It parses the entire input directing the code execution 
+     * through the Grammar Rules of the Parse Table (src/resources/ParseTable.png).
+     *
+     * @return the root node of the AST: ParsePrg.
+     * @throws SyntacticException if a syntactic error occurs during parsing.
+     */
+	public NodeProgram parse() throws  SyntacticException {
 		return this.parsePrg();
 	}
 
-	//0
-	private NodeProgram parsePrg() throws SyntacticException, LexicalException {
+    /**
+     * RULE #0
+     * <p>Parses a program ({@code Prg -> DSs EOF}).</p>
+     *
+     * @return a NodeProgram representing the program.
+     * @throws SyntacticException if a syntactic error occurs.
+     */
+	private NodeProgram parsePrg() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();	
+		token = wrapScanner(this.scanner::peekToken);	
 		ArrayList<NodeDecSt> nodeDecSt;
 
 		switch(token.getType()) {
@@ -56,10 +103,19 @@ public class Parser {
 		}
 	}
 
-	//1.2.3
-	private ArrayList<NodeDecSt> parseDSs() throws SyntacticException, LexicalException {
+    /**
+     * RULE#1 #2 #3
+     * <p>Parses a sequence of declarations and statements.</p>
+     *   <li>{@code DSs -> Dcl DSs}</li>
+     *   <li>{@code DSs -> Stm DSs}</li>
+     *   <li>{@code DSs -> Epsilon}</li>
+     *
+     * @return a list of NodeDecSt representing the declarations and statements.
+     * @throws SyntacticException if a syntactic error occurs.
+     */
+	private ArrayList<NodeDecSt> parseDSs() throws SyntacticException{
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		NodeDecl nodeDecl;
 		ArrayList<NodeDecSt> nodeDecSt = new ArrayList<NodeDecSt>();
@@ -85,10 +141,17 @@ public class Parser {
 		}
 	}
 
-	//4	
-	private NodeDecl parseDcl() throws SyntacticException, LexicalException {
+	/**
+	 * RULE#4
+	 * <p>Parses a declaration {@code Dcl -> Ty id DclP}</p>
+
+	 *
+	 * @return a NodeDecl representing the declaration.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeDecl parseDcl() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		switch(token.getType()) {
 		case TYFLOAT, TYINT ->{
@@ -103,10 +166,18 @@ public class Parser {
 		}
 	}
 
-	//5. 6
-	private NodeExpr parseDclP() throws SyntacticException, LexicalException {
+    /**
+     * RULE#5 #6
+     * <p>Parses an optional initializer for declaration.
+     *   <li>{@code DclP -> ;}</li>
+     *   <li>{@code DclP -> = Exp ;}</li>
+     *
+     * @return a list of NodeDecSt representing the declarations and statements.
+     * @throws SyntacticException if a syntactic error occurs.
+     */
+	private NodeExpr parseDclP() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 		NodeExpr nodeExpr;
 
 		switch(token.getType()) {
@@ -124,10 +195,18 @@ public class Parser {
 		}
 	}
 
-	//7.8
-	private NodeStm parseStm() throws SyntacticException, LexicalException {
+	/**
+	 * RULE #7 #8
+	 * <p>Parses a statement.
+	 *   <li>{@code Stm -> id Op Exp ;}</li>
+	 *   <li>{@code Stm -> print id ;}</li>
+	 *
+	 * @return a NodeStm representing the statement.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeStm parseStm() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		NodeId nodeId;
 
@@ -177,10 +256,17 @@ public class Parser {
 		}
 	}
 
-	//9
-	private NodeExpr parseExp() throws SyntacticException, LexicalException {
+	/**
+	 * RULE #9
+	 * <p>Parses an expression ({@code Exp}).
+	 * <li>{@code Exp -> Tr ExpP}</li>
+	 *
+	 * @return a NodeExpr representing the expression.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeExpr parseExp() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		switch(token.getType()) {
 		case ID, FLOAT, INT ->{
@@ -191,10 +277,21 @@ public class Parser {
 		default -> throw new SyntacticException("Issue in parseExp a riga " + token.getLine());
 		}
 	}
-	//10.11.12
-	private NodeExpr parseExpP(NodeExpr nodeExpr) throws SyntacticException, LexicalException {
+
+	/**
+	 * RULE #10 #11 #12
+	 * Parses a continuation of an expression.
+	 *   <li>{@code ExpP -> + Tr ExpP}</li>
+	 *   <li>{@code ExpP -> - Tr ExpP}</li>
+	 *   <li>{@code ExpP -> Epsilon}</li>
+	 *
+	 * @param nodeExpr the left-hand side of the expression.
+	 * @return a  NodeExpr representing the full expression.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeExpr parseExpP(NodeExpr nodeExpr) throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		NodeExpr exp;
 		NodeExpr expP;
@@ -218,10 +315,18 @@ public class Parser {
 		default -> throw new SyntacticException("Issue in parseExpP a riga " + token.getLine());
 		}
 	}
-	//13
-	private NodeExpr parseTr() throws SyntacticException, LexicalException {
+
+	/**
+	 * RULE #13
+	 * Parses a term.
+	 *   <li>{@code Tr -> Val TrP}</li>
+	 *
+	 * @return a NodeExpr representing the term.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeExpr parseTr() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		NodeExpr exp1;
 		NodeExpr exp2;
@@ -235,10 +340,21 @@ public class Parser {
 		default -> throw new SyntacticException("Issue in parseTr a riga " + token.getLine());
 		}
 	}
-	//14.15.16
-	private NodeExpr parseTrP(NodeExpr nodeExpr) throws SyntacticException, LexicalException {
+
+	/**
+	 * RULE #14 #15 #16
+	 * Parses a continuation of a term.
+	 * 	 <li>{@code TrP -> * Val TrP}</li>
+	 *   <li>{@code TrP -> / Val TrP}</li>
+	 *   <li>{@code TrP -> Epsilon}</li>
+	 *
+	 * @param nodeExpr the left-hand side of the term.
+	 * @return a NodeExpr representing the full term.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeExpr parseTrP(NodeExpr nodeExpr) throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		NodeExpr exp;
 		NodeExpr expP;
@@ -263,10 +379,19 @@ public class Parser {
 		}
 	}
 
-	//17.18
-	private LangType parseTy() throws SyntacticException, LexicalException {
+	/**
+	 * RULE #17 #18
+	 * Parses a type.
+
+	 *   <li>{@code Ty -> float}</li>
+	 *   <li>{@code Ty -> int}</li>
+	 *
+	 * @return the LangType representing the type.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private LangType parseTy() throws SyntacticException{
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		switch(token.getType()) {
 		case TYFLOAT ->{
@@ -281,10 +406,19 @@ public class Parser {
 		}
 	}
 
-	//19.20.21
-	private NodeExpr parseVal() throws SyntacticException, LexicalException {
+	/**
+	 * RULE #19 #20 #21
+	 * Parses a value.
+	 *   <li>{@code Val -> int}</li>
+	 *   <li>{@code Val -> float}</li>
+	 *   <li>{@code Val -> id}</li>
+	 *
+	 * @return a NodeExpr representing the value.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private NodeExpr parseVal() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 
 		String value;
 		String id;
@@ -306,10 +440,19 @@ public class Parser {
 		}
 	}
 
-	//22.23
-	private Token parseOp() throws SyntacticException, LexicalException {
+	/**
+	 * RULE #22 #23
+	 * Parses an operator.
+	 *   <li>{@code Op -> =}</li>
+	 *   <li>{@code Op -> += | -= | *= | /=}</li>
+
+	 *
+	 * @return a Token representing the operator.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
+	private Token parseOp() throws SyntacticException {
 		Token token;
-		token = this.scanner.peekToken();
+		token = wrapScanner(this.scanner::peekToken);
 		Token op;
 
 		switch(token.getType()) {

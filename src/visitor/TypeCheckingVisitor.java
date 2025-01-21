@@ -1,7 +1,7 @@
 package visitor;
 
-import java.util.ArrayList;
 
+import ast.LangType;
 import ast.NodeAssign;
 import ast.NodeBinOp;
 import ast.NodeConst;
@@ -12,6 +12,7 @@ import ast.NodeId;
 import ast.NodePrint;
 import ast.NodeProgram;
 import symbolTable.SymbolTable;
+import symbolTable.SymbolTable.Attributes;
 import typeChecking.DescEnumType;
 import typeChecking.TypeDescriptor;
 
@@ -26,11 +27,12 @@ public class TypeCheckingVisitor implements IVisitor{
 		SymbolTable.init();
 	}
 
-
 	public TypeDescriptor getResultType() {
 		return resultType;
 	}
 
+	//METODI PER VISITA
+	
 	@Override
 	public void visit(NodeProgram node) {
 		for (NodeDecSt decSt : node.getDecSts()) {
@@ -39,19 +41,34 @@ public class TypeCheckingVisitor implements IVisitor{
 
 	}
 
-	@Override
+	@Override	//fatto
 	public void visit(NodeId node) {
-		// TODO Auto-generated method stub
+		String id = node.getName();
+		Attributes type = SymbolTable.lookup(id);
+		if(type != null) {
+			switch(type.getType()) {
+			case TYINT -> resultType = new TypeDescriptor(DescEnumType.SUCCESS);
+			case TYFLOAT -> resultType = new TypeDescriptor(DescEnumType.FLOAT);
+			}
+		} else {
+			errorMsg += "Variable '" + id + "' has not been properly declared\n";
+			resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
+			return;
+		}
 
 	}
 
-	@Override
+	@Override	//fatto
 	public void visit(NodeConst node) {
-		// TODO Auto-generated method stub
+
+		switch(node.getType()) {
+		case TYINT -> resultType = new TypeDescriptor(DescEnumType.INT);
+		case TYFLOAT -> resultType = new TypeDescriptor(DescEnumType.FLOAT);
+		}
 
 	}
 
-	@Override
+	@Override	//fatto
 	public void visit(NodeDeref node) {
 		node.getId().accept(this);
 
@@ -86,8 +103,12 @@ public class TypeCheckingVisitor implements IVisitor{
 
 	@Override
 	public void visit(NodeDecl node) {
-		// TODO Auto-generated method stub
-
+		String id = node.getId().getName();
+		Attributes entry = new Attributes(node.getType());
+		
+		
+		
+		
 	}
 
 	@Override

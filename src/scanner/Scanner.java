@@ -10,6 +10,12 @@ import java.util.HashSet;
 
 import token.*;
 
+/**
+ * Lexical scanner for tokenizing a text file.
+ * The scanner reads characters, generates tokens while also handling lexical exceptions for invalid inputs.
+ * 
+ * @author Lorenzo Mirto Bertoldo (github.com/climadd)
+ */
 public class Scanner {
 	final char EOF = (char) -1; 
 	private int line;
@@ -29,7 +35,12 @@ public class Scanner {
 	//per peekToken()
 	Token nextTk = null;
 
-	//costruttore
+    /**
+     * Constructor of a Scanner object for the given file.
+     *
+     * @param fileName the name of the source file to scan.
+     * @throws FileNotFoundException if the file cannot be found.
+     */
 	public Scanner(String fileName) throws FileNotFoundException {
 
 		this.buffer = new PushbackReader(new FileReader(fileName));
@@ -73,7 +84,13 @@ public class Scanner {
 	  errori nel riconoscimento di un identificatore 
 		iv) identificatore seguito da numero.
 	 */
-
+	
+    /**
+     * Peeks the next token without consuming it.
+     *
+     * @returns the next token in the stream.
+     * @throws LexicalException if a lexical error occurs.
+     */
 	public Token peekToken() throws LexicalException {
 		if (nextTk == null) {
 			nextTk = nextToken();
@@ -81,9 +98,15 @@ public class Scanner {
 		return nextTk;
 	}
 
-	// NEXT TOKEN
-	// utilizza peekchar per stabilire in che parte di codice entrare. Richiama la funzione e ritorna il contenuto delle funzioni
-	public Token nextToken() throws LexicalException {	//ritorna (consumando) il prossimo token sullo stream 
+	
+	 /**
+     * Uses peekChar() to determine which other method to call
+     * Then it retrieves the next token in the stream, consuming it.
+     * 
+     * @return the next token.
+     * @throws LexicalException if a lexical error occurs.
+     */
+	public Token nextToken() throws LexicalException { 
 		if (nextTk != null) {
 			Token temp = nextTk;
 			nextTk = null;
@@ -131,7 +154,14 @@ public class Scanner {
 	}
 
 	//SCAN NUMBER	FINITA 
-
+    /**
+     * Scans a numeric token (integer or floating-point).
+     *
+     * @param nextChar the current character being processed.
+     * @return a Token representing the number.
+     * @throws IOException if a I/O related error occurs.
+     * @throws LexicalException if the number is not valid.
+     */
 	private Token scanNumber(char nextChar) throws IOException, LexicalException {
 
 		StringBuilder numString = new StringBuilder();
@@ -176,6 +206,14 @@ public class Scanner {
 	// parole chiave usate l'HaskMap di corrispondenza
 	//Se riconosce una KeyWord ritorna il token KEYWORD
 
+    /**
+     * Scans an identifier or keyword.
+     *
+     * @param nextChar the current character being processed.
+     * @returns a Token representing the identifier or keyword.
+     * @throws IOException if an I/O error occurs.
+     * @throws LexicalException if an error occurs during scanning.
+     */
 	private Token scanId(char nextChar) throws IOException, LexicalException {
 
 		StringBuilder idString = new StringBuilder(nextChar);	
@@ -197,6 +235,13 @@ public class Scanner {
 
 
 	//SCAN OPERATOR		FINITA
+    /**
+     * Scans an operator token, supporting single or composite operators.
+     *
+     * @param nextChar the current character being processed.
+     * @returns a Token representing the operator.
+     * @throws IOException if an I/O error occurs.
+     */
 	private Token scanOperator(char nextChar) throws IOException {
 		Token token;
 		//check per caratteri che sono necessariamente singoli
@@ -225,6 +270,12 @@ public class Scanner {
 	}
 
 	//SCAN EOF		FINITA
+
+    /**
+     * Scans the end-of-file (EOF) character.
+     *
+     * @returns a Token representing the EOF.
+     */
 	private Token scanEOF() {
 		Token token = new Token(TokenType.EOF, line);
 		return token;
