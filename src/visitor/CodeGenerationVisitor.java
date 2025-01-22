@@ -11,7 +11,7 @@ import ast.NodeProgram;
 
 public class CodeGenerationVisitor implements IVisitor{
 
-	private String codiceDc; // mantiene il codice della visita
+	private String dcCode; // mantiene il codice della visita
 	
 	@Override
 	public void visit(NodeProgram node) {
