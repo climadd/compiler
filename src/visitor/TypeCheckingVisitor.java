@@ -1,7 +1,5 @@
 package visitor;
 
-
-import ast.LangType;
 import ast.NodeAssign;
 import ast.NodeBinOp;
 import ast.NodeConst;
@@ -49,7 +47,7 @@ public class TypeCheckingVisitor implements IVisitor{
 			case TYFLOAT -> resultType = new TypeDescriptor(DescEnumType.FLOAT);
 			}
 		} else {
-			errorMsg += "Variable '" + id + "' has not been properly declared\n";
+			errorMsg += "Variable '" + id + "' has not been properly declared.\n";
 			resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
 			return;
 		}
@@ -70,7 +68,7 @@ public class TypeCheckingVisitor implements IVisitor{
 
 	}
 
-	@Override
+	@Override	//fatto
 	public void visit(NodeBinOp node) {
 		node.getLeft().accept(this);
 		TypeDescriptor leftTD = resultType;
@@ -93,15 +91,46 @@ public class TypeCheckingVisitor implements IVisitor{
 			}
 		}
 		else {
-			// SE SONO MISTI IL RESULT SARà FLOAT per forza
-
+			if (leftTD.getType() != rightTD.getType()) {
+				resultType = new TypeDescriptor(DescEnumType.FLOAT);
+			}
 		}
 	}
 
-	@Override
+	@Override //fatto
 	public void visit(NodeDecl node) {
 		String id = node.getId().getName();
+		TypeDescriptor typeToCompare;
+		
+		switch(node.getType()) {
+		case TYINT -> typeToCompare = new TypeDescriptor(DescEnumType.INT);
+		case TYFLOAT -> typeToCompare = new TypeDescriptor(DescEnumType.FLOAT);
+		default -> {
+			new TypeDescriptor(DescEnumType.ERROR);
+			return;
+			}
+		}
 		Attributes entry = new Attributes(node.getType());
+		if (SymbolTable.enter(id, entry)) {
+			if(node.getInit() == null) {
+				resultType = new TypeDescriptor(DescEnumType.VOID);
+				return;
+			}
+			else {
+				node.getInit().accept(this);
+				TypeDescriptor paramether = resultType;
+		
+				if(typeToCompare.isCompatible(paramether)) {
+					resultType = new TypeDescriptor(DescEnumType.VOID);
+				}
+				else resultType = new TypeDescriptor(DescEnumType.ERROR);
+			}
+		}
+		else {
+			errorMsg += "Variable '" + node.getId().getName() + "' has already been declared.\n";
+			resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
+			return;
+		}
 
 
 
@@ -129,14 +158,14 @@ public class TypeCheckingVisitor implements IVisitor{
 				resultType = new TypeDescriptor(DescEnumType.VOID);
 			}
 			else {
-				errorMsg += "unable to assign a float value to " + node.getId().getName() + " variable.";
+				errorMsg += "Unable to assign a float value to '" + node.getId().getName() + "' variable./n";
 				resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
 				return;
 			}
 		}
 	}
 
-	@Override	//FINITO
+	@Override	//fatto
 	public void visit(NodePrint node) {
 		node.getId().accept(this);	
 		if(resultType.getType() != DescEnumType.ERROR) {

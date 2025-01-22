@@ -71,7 +71,7 @@ public class Parser {
 	//PARSING METHODS
     /**
      * Entry point for the parsing process. It parses the entire input directing the code execution 
-     * through the Grammar Rules of the Parse Table (src/resources/ParseTable.png).
+     * through the Grammar Rules of the Parse Table (src/../resources/ParseTable.png).
      *
      * @return the root node of the AST: ParsePrg.
      * @throws SyntacticException if a syntactic error occurs during parsing.

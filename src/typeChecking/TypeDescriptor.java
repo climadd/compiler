@@ -10,7 +10,6 @@ public class TypeDescriptor {
 		se ci sono errori contenere un "i" messaggio di errore
 	 */
 
-
 	private DescEnumType type;
 	private String msg;
 
@@ -33,14 +32,18 @@ public class TypeDescriptor {
 		return msg;
 	}
 
-	/*  
-	 un "metodo per la compatibilità" da usare dell’analisi dell’assegnamento e delle dich con inizializ.
-	 es: nell' ASSEGNAMENTO e Dichiarazione (CON ASSEGNAMENTO) posso assegnare un int a float
-	 ma NON posso assegnare un float a variabile int
-	*/
-	public boolean isCompatible(TypeDescriptor candidate) {
-		
-		if(candidate.getType() == candidate.getType()) {
+	/**  
+	 * Method for Assignments (or a Declarations with assignment) whenever DescEnumTypes don't match. 
+	 * The logic is the following<p>
+	 * 
+	 * <li>this.object FLOAT (paramether INT) -> true
+	 * <li>this.object INT (paramether FLOAT) -> false
+	 *
+	 *@param candidate
+	 *@returns true if the type is compatible
+	 */
+	public boolean isCompatible(TypeDescriptor candidate) {	
+		if(candidate.getType() == DescEnumType.INT && this.getType() == DescEnumType.FLOAT)  {
 			return true;
 		}
 		else return false;
