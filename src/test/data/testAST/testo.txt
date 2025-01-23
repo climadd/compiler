@@ -1,4 +1,0 @@
-int temp;
-temp += 7;
-float temp;
-temp = 3 + 7 * 5 - 6 / 4 ;

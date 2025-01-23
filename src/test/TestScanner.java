@@ -319,36 +319,4 @@ class TestScanner {
 
 	}
 
-	//	@Test
-	//	public void testReadChar() {
-	//		//TODO: LATER ALLIGATER
-	//	}
-	//
-	//	@Test
-	//	public void testPeekChar() {
-	//
-	//	}
-	//
-	//	@Test
-	//	public void testScanNumber() {
-	//
-	//	}
-	//
-	//	@Test
-	//	public void testScanId(){
-	//
-	//	}
-	//
-	//	@Test
-	//	public void testScanOperator() {
-	//
-	//	}
-	//
-	//
-	//
-	//	@Test
-	//	public void testNextToken() {
-	//
-	//	}
-
 }
