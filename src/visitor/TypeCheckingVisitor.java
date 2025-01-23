@@ -1,6 +1,7 @@
 package visitor;
 
 import ast.LangOper;
+
 import ast.NodeAssign;
 import ast.NodeBinOp;
 import ast.NodeConst;
@@ -15,12 +16,20 @@ import symbolTable.SymbolTable.Attributes;
 import typeChecking.DescEnumType;
 import typeChecking.TypeDescriptor;
 
+/**
+ * The class implements the IVisitor and defines its visit methods in order to traverse the AST's
+ * nodes to validate the type compatibility of the instructions.
+ * 
+ * @author Lorenzo Mirto Bertoldo (github.com/climadd)
+ */
 public class TypeCheckingVisitor implements IVisitor{
 
-	private TypeDescriptor resultType; //mantiene il risultato dell'ultimo nodo visitato
-	private String errorMsg = ""; //accumula messaggi di errore
+	private TypeDescriptor resultType; //keeps the result of the last visited node
+	private String errorMsg = ""; //accumulates error messages
 
-	//initialization
+	/**
+	 * Initializes symbol table while constructing the TypeCheckingVisitor
+	 */
 	public TypeCheckingVisitor() {
 		super();
 		SymbolTable.init();
@@ -30,7 +39,12 @@ public class TypeCheckingVisitor implements IVisitor{
 		return resultType;
 	}
 
-	//METODI PER VISITA	
+	//VISIT METHODS	
+	/**
+	 * Visits a program node and validates all declarations/statements.
+	 * 
+	 * @param node the program node
+	 */
 	@Override
 	public void visit(NodeProgram node) {
 		for (NodeDecSt decSt : node.getDecSts()) {
@@ -38,6 +52,11 @@ public class TypeCheckingVisitor implements IVisitor{
 		}
 	}
 
+	/**
+	 * Visits an identifier node and retrieves its type from the symbol table.
+	 * 
+	 * @param node the identifier node
+	 */
 	@Override	//fatto
 	public void visit(NodeId node) {
 		String id = node.getName();
@@ -54,6 +73,13 @@ public class TypeCheckingVisitor implements IVisitor{
 		}
 	}
 
+
+
+	/**
+	 * Visits a constant node and sets its type based on the constant type.
+	 * 
+	 * @param node the constant node
+	 */
 	@Override	//fatto
 	public void visit(NodeConst node) {
 
@@ -63,12 +89,23 @@ public class TypeCheckingVisitor implements IVisitor{
 		}
 	}
 
+    /**
+     * Visits a dereference node and validates the identifier it refers to.
+     * 
+     * @param node the dereference node
+     */
 	@Override	//fatto
 	public void visit(NodeDeref node) {
 		node.getId().accept(this);
 
 	}
 
+    /**
+     * Visits a binary operation node, checks operand types, and sets the result type.
+     * Handles implicit float division if needed.
+     * 
+     * @param node the binary operation node
+     */
 	@Override	//fatto
 	public void visit(NodeBinOp node) {
 		node.getLeft().accept(this);
@@ -88,27 +125,32 @@ public class TypeCheckingVisitor implements IVisitor{
 			resultType = new TypeDescriptor(DescEnumType.INT);
 		}
 		else {
-				resultType = new TypeDescriptor(DescEnumType.FLOAT);
-				
-				//changing the node generated from the parsing in order to handle the FLOAT divisions
-				if (node.getOp() == LangOper.DIVIDE) {
-					node.setOp(LangOper.DIVFLOAT);
-				}
+			resultType = new TypeDescriptor(DescEnumType.FLOAT);
+
+			//changing the node generated from the parsing in order to handle the FLOAT divisions
+			if (node.getOp() == LangOper.DIVIDE) {
+				node.setOp(LangOper.DIVFLOAT);
 			}
 		}
+	}
 
+    /**
+     * Visits a declaration node, validates its type, and checks for initialization consistency.
+     * 
+     * @param node the declaration node
+     */
 	@Override //fatto
 	public void visit(NodeDecl node) {
 		String id = node.getId().getName();
 		TypeDescriptor typeToCompare;
-		
+
 		switch(node.getType()) {
 		case TYINT -> typeToCompare = new TypeDescriptor(DescEnumType.INT);
 		case TYFLOAT -> typeToCompare = new TypeDescriptor(DescEnumType.FLOAT);
 		default -> {
 			new TypeDescriptor(DescEnumType.ERROR);
 			return;
-			}
+		}
 		}
 		Attributes entry = new Attributes(node.getType());
 		if (SymbolTable.enter(id, entry)) {
@@ -119,7 +161,7 @@ public class TypeCheckingVisitor implements IVisitor{
 			else {
 				node.getInit().accept(this);
 				TypeDescriptor paramether = resultType;
-		
+
 				if(typeToCompare.isCompatible(paramether)) {
 					resultType = new TypeDescriptor(DescEnumType.VOID);
 				}
@@ -131,13 +173,13 @@ public class TypeCheckingVisitor implements IVisitor{
 			resultType = new TypeDescriptor(DescEnumType.ERROR, errorMsg);
 			return;
 		}
-
-
-
-
-
 	}
 
+    /**
+     * Visits an assignment node and validates compatibility between identifier and expression types.
+     * 
+     * @param node the assignment node
+     */
 	@Override	//fatto
 	public void visit(NodeAssign node) {
 		node.getId().accept(this);
@@ -165,6 +207,11 @@ public class TypeCheckingVisitor implements IVisitor{
 		}
 	}
 
+    /**
+     * Visits a print node and ensures the identifier being printed has a valid type.
+     * 
+     * @param node the print node
+     */
 	@Override	//fatto
 	public void visit(NodePrint node) {
 		node.getId().accept(this);	

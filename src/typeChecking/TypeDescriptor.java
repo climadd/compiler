@@ -1,19 +1,22 @@
 package typeChecking;
 
+/**
+ * The TypeDescriptor class represents the type information for nodes during type checking.
+ * 
+ * <p>If no type errors are present, it specifies whether the type is {@code int}, {@code float}, 
+ * or {@code void}.</p>
+ * 
+ * <p>If type errors exist, it contains an error message describing the issue.</p>
+ */
 public class TypeDescriptor {
-
-	/*
-  		una classe TypeDescriptor che deve
-	 *se non ci sono errori di tipo* dire se il tipo è intero, float, oppure void 
-		(che usiamo per dichiarazioni e istruzioni corrette)
-
-		se ci sono errori contenere un "i" messaggio di errore
-	 */
 
 	private DescEnumType type;
 	private String msg;
 
-	//constructors
+	/**
+	 * constructor
+	 * @param type
+	 */
 	public TypeDescriptor(DescEnumType type) {
 		this.type = type;
 	}

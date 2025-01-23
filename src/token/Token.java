@@ -1,15 +1,24 @@
 package token;
 
+/**
+ * Contains the informations about the Token as a structure and its handling methods
+ */
 public class Token {
 
-	private TokenType tipo;	//enum
-	private int riga;	//riga del codice in cui si trova il token
-	private String val;	// OPZIONALE: per identificatori e numeri contiene la string matchata
+	private TokenType type;	//enum
+	private int line;	//riga del codice in cui si trova il token
+	private String value;	// OPZIONALE: per identificatori e numeri contiene la string matchata
 	
+	/**
+	 * constructor
+	 * @param type
+	 * @param line
+	 * @param value
+	 */
 	public Token(TokenType type, int line, String value) {
-		this.tipo = type;
-		this.riga = line;
-		this.val = value;
+		this.type = type;
+		this.line = line;
+		this.value = value;
 	}
 	
 	public Token(TokenType type, int line) {
@@ -18,34 +27,35 @@ public class Token {
 
     // Getters per i campi
 	public int getLine() {
-		return this.riga;
+		return this.line;
 	}
 	
 	public TokenType getType() {
-		return this.tipo;
+		return this.type;
 	}
 	
 	public String getValue() {
-		return this.val;
+		return this.value;
 	}
 	
-    
+	/**
+	 * toString method
+	 * @returns a string that represents the data of a token
+	 */
 	public String toString() {
-		if(this.val != null)
-			return("<" + tipo + ", r:" + riga + ", " + val + ">");
+		if(this.value != null)
+			return("<" + this.type + ", r:" + this.line + ", " + this.value + ">");
 		else 
-			return ("<" + tipo + ", r:" + riga + ">");
+			return ("<" + this.type + ", r:" + this.line + ">");
 	}
-
-	//nota: dopo ogni virgola preferisco mettere uno spazio
 	
-	/*	esempio output toString()
+	/*	example output toString()
 	 * 
-	 * 	<TYINT,r:1><ID,r:1,tempa><SEMI,r:1>
-		<ID,r:2,tempa><OP_ASSIGN,r:2,=><INT,r:2,5><SEMI,r:2>
-		<TYFLOAT,r:3><ID,r:3,tempb><OP_ASSIGN,r:3,=><ID,r:3,tempa><DIVIDE,r:3><FLOAT,r:3,3.2><SEMI,r:2>
-		<ID,r:4,tempb><OP_ASSIGN,r:4,+=><INT,r:4,7><SEMI,r:4>
-		<PRINT,r:5><ID,r:5,tempb><SEMI,r:5><EOF,r:5>
+	 * 	<TYINT, r:1><ID, r:1, tempa><SEMI ,r:1>
+		<ID, r:2, tempa><OP_ASSIGN, r:2, =><INT, r:2, 5><SEMI, r:2>
+		<TYFLOAT, r:3><ID, r:3, tempb><OP_ASSIGN, r:3, =><ID, r:3, tempa><DIVIDE, r:3><FLOAT, r:3, 3.2><SEMI, r:2>
+		<ID, r:4, tempb><OP_ASSIGN, r:4, +=><INT, r:4, 7><SEMI, r:4>
+		<PRINT, r:5><ID, r:5, tempb><SEMI, r:5><EOF, r:5>
 
      
      */

@@ -21,46 +21,46 @@ public class Parser {
 
 	private Scanner scanner;
 
-    /**
-     * Constructor of a Parser object for the given file.
-     *
-     * @param the Scanner object used to tokenize the input.
-     */
+	/**
+	 * Constructor of a Parser object for the given file.
+	 *
+	 * @param the Scanner object used to tokenize the input.
+	 */
 	public Parser (Scanner scanner) {
 		this.scanner = scanner;
 	}
 
-    /**
-     * Wraps every Scanner-defined method in order to handle SyntacticExceptions separately.
-     * in this case .peekToken() and .nextToken()
-     *
-     * @param action<T> which represent the method that's gonna be called
-     * @return the result of executing the scanner action.
-     * @throws SyntacticException if such exception is thrown during execution.
-     */
-    private <T> T wrapScanner(SyntaxErrorWrapper<T> action) throws SyntacticException {
-        try {
-            return action.execute();
-        } catch (LexicalException e) {
-            throw new SyntacticException("Lexical error occurred: " + e.getMessage());
-        }
-    }	
-	
-	
+	/**
+	 * Wraps every Scanner-defined method in order to handle SyntacticExceptions separately.
+	 * in this case .peekToken() and .nextToken()
+	 *
+	 * @param action<T> which represent the method that's gonna be called
+	 * @return the result of executing the scanner action.
+	 * @throws SyntacticException if such exception is thrown during execution.
+	 */
+	private <T> T wrapScanner(SyntaxErrorWrapper<T> action) throws SyntacticException {
+		try {
+			return action.execute();
+		} catch (LexicalException e) {
+			throw new SyntacticException("Lexical error occurred: " + e.getMessage());
+		}
+	}	
+
+
 	//MATCH  
-    /**
-    * Matches the next token in the input stream, with its expected TokenType.
-    * If the next token matches the expected type, it gets consumed and is returned.
-    *
-    * @param type the expected TokenType.
-    * @return the correctly matched Token.
-    * @throws SyntacticException if the next token does not match the expected type.
-    */
+	/**
+	 * Matches the next token in the input stream, with its expected TokenType.
+	 * If the next token matches the expected type, it gets consumed and is returned.
+	 *
+	 * @param type the expected TokenType.
+	 * @return the correctly matched Token.
+	 * @throws SyntacticException if the next token does not match the expected type.
+	 */
 	private Token match(TokenType type) throws  SyntacticException {
 		Token tk = wrapScanner(scanner::peekToken);
 
 		if(type.equals(tk.getType())) {
-//			System.out.println(tk);		 // per debug
+			//			System.out.println(tk);		 // per debug
 			return wrapScanner(scanner::nextToken);
 		}
 		else 
@@ -69,24 +69,24 @@ public class Parser {
 
 
 	//PARSING METHODS
-    /**
-     * Entry point for the parsing process. It parses the entire input directing the code execution 
-     * through the Grammar Rules of the Parse Table (src/../resources/ParseTable.png).
-     *
-     * @return the root node of the AST: ParsePrg.
-     * @throws SyntacticException if a syntactic error occurs during parsing.
-     */
+	/**
+	 * Entry point for the parsing process. It parses the entire input directing the code execution 
+	 * through the Grammar Rules of the Parse Table (src/../resources/ParseTable.png).
+	 *
+	 * @return the root node of the AST: ParsePrg.
+	 * @throws SyntacticException if a syntactic error occurs during parsing.
+	 */
 	public NodeProgram parse() throws  SyntacticException {
 		return this.parsePrg();
 	}
 
-    /**
-     * RULE #0
-     * <p>Parses a program ({@code Prg -> DSs EOF}).</p>
-     *
-     * @return a NodeProgram representing the program.
-     * @throws SyntacticException if a syntactic error occurs.
-     */
+	/**
+	 * RULE #0
+	 * <p>Parses a program ({@code Prg -> DSs EOF}).</p>
+	 *
+	 * @return a NodeProgram representing the program.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
 	private NodeProgram parsePrg() throws SyntacticException {
 		Token token;
 		token = wrapScanner(this.scanner::peekToken);	
@@ -103,16 +103,16 @@ public class Parser {
 		}
 	}
 
-    /**
-     * RULE#1 #2 #3
-     * <p>Parses a sequence of declarations and statements.</p>
-     *   <li>{@code DSs -> Dcl DSs}</li>
-     *   <li>{@code DSs -> Stm DSs}</li>
-     *   <li>{@code DSs -> Epsilon}</li>
-     *
-     * @return a list of NodeDecSt representing the declarations and statements.
-     * @throws SyntacticException if a syntactic error occurs.
-     */
+	/**
+	 * RULE#1 #2 #3
+	 * <p>Parses a sequence of declarations and statements.</p>
+	 *   <li>{@code DSs -> Dcl DSs}</li>
+	 *   <li>{@code DSs -> Stm DSs}</li>
+	 *   <li>{@code DSs -> Epsilon}</li>
+	 *
+	 * @return a list of NodeDecSt representing the declarations and statements.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
 	private ArrayList<NodeDecSt> parseDSs() throws SyntacticException{
 		Token token;
 		token = wrapScanner(this.scanner::peekToken);
@@ -126,20 +126,18 @@ public class Parser {
 			nodeDecl = parseDcl();
 			nodeDecSt = parseDSs();
 			nodeDecSt.add(0, nodeDecl);
-			return nodeDecSt;
 		}
 		case ID, PRINT ->{
 			nodeStm = parseStm();
 			nodeDecSt = parseDSs();
 			nodeDecSt.add(0,nodeStm);
-			return nodeDecSt;
 		}
-		case EOF -> {	
-			return nodeDecSt;
+		case EOF -> {
+			//dont parse further
 		}
 		default -> throw new SyntacticException("Issue in parseDSs a riga " + token.getLine());
 		}
-		
+		return nodeDecSt;
 	}
 
 	/**
@@ -167,15 +165,15 @@ public class Parser {
 		}
 	}
 
-    /**
-     * RULE#5 #6
-     * <p>Parses an optional initializer for declaration.
-     *   <li>{@code DclP -> ;}</li>
-     *   <li>{@code DclP -> = Exp ;}</li>
-     *
-     * @return a list of NodeDecSt representing the declarations and statements.
-     * @throws SyntacticException if a syntactic error occurs.
-     */
+	/**
+	 * RULE#5 #6
+	 * <p>Parses an optional initializer for declaration.
+	 *   <li>{@code DclP -> ;}</li>
+	 *   <li>{@code DclP -> = Exp ;}</li>
+	 *
+	 * @return a list of NodeDecSt representing the declarations and statements.
+	 * @throws SyntacticException if a syntactic error occurs.
+	 */
 	private NodeExpr parseDclP() throws SyntacticException {
 		Token token;
 		token = wrapScanner(this.scanner::peekToken);
@@ -298,7 +296,7 @@ public class Parser {
 		NodeExpr expP;
 
 		switch(token.getType()) {
-		case PLUS ->{
+		case PLUS->{
 			match(TokenType.PLUS);
 			exp = parseTr();
 			expP = parseExpP(exp);

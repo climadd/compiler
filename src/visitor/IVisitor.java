@@ -2,6 +2,9 @@ package visitor;
 
 import ast.*;
 
+/**
+ * Interface to be implemented by every visitor class. Accomodates project expansion.
+ */
 public interface IVisitor {
 
 	public void visit(NodeProgram node);

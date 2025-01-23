@@ -200,12 +200,7 @@ public class Scanner {
 
 
 
-	//SCANID
-	// che legge tutte le lettere minuscole e ritorna un Token ID o
-	// il Token associato Parola Chiave (per generare i Token per le
-	// parole chiave usate l'HaskMap di corrispondenza
-	//Se riconosce una KeyWord ritorna il token KEYWORD
-
+	//SCANID FATTA
     /**
      * Scans an identifier or keyword.
      *

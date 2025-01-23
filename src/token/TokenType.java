@@ -1,5 +1,8 @@
 package token;
 
+/**
+ * enumeration used to differentiate token types
+ */
 public enum TokenType {
 	
 	INT,	//	0 | [1-9]([0-9]*) 
@@ -8,8 +11,8 @@ public enum TokenType {
 	TYINT,	// int
 	TYFLOAT,	// float
 	PRINT,	// print
-	ASSIGN,
-	OP_ASSIGN,	// = | += | -= | *= | /=
+	ASSIGN,	// =
+	OP_ASSIGN,	// += | -= | *= | /=
 	PLUS,	// +
 	MINUS,	// -
 	TIMES,	// *
