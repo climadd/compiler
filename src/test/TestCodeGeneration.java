@@ -12,7 +12,11 @@ import parser.Parser;
 import parser.SyntacticException;
 import visitor.*;
 
-
+/**
+ * 
+ * @author loren
+ *
+ */
 public class TestCodeGeneration {
 
 	private String path = "./src/test/data/testCodeGeneration/";
