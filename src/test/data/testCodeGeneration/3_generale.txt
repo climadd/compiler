@@ -1,0 +1,12 @@
+int i;
+float f;
+i = 5+3;
+f = i + 0.5;
+print i;
+f /= 4;
+float flo;
+print f;
+flo = f - 1;
+flo *= f;
+print flo;
+

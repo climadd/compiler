@@ -60,7 +60,7 @@ public class Parser {
 		Token tk = wrapScanner(scanner::peekToken);
 
 		if(type.equals(tk.getType())) {
-			System.out.println(tk);		 // per debug
+//			System.out.println(tk);		 // per debug
 			return wrapScanner(scanner::nextToken);
 		}
 		else 
@@ -134,11 +134,12 @@ public class Parser {
 			nodeDecSt.add(0,nodeStm);
 			return nodeDecSt;
 		}
-		case EOF -> {
+		case EOF -> {	
 			return nodeDecSt;
 		}
 		default -> throw new SyntacticException("Issue in parseDSs a riga " + token.getLine());
 		}
+		
 	}
 
 	/**

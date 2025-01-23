@@ -1,5 +1,6 @@
 package visitor;
 
+import ast.LangOper;
 import ast.NodeAssign;
 import ast.NodeBinOp;
 import ast.NodeConst;
@@ -83,19 +84,18 @@ public class TypeCheckingVisitor implements IVisitor{
 			resultType = rightTD;
 			return;
 		}
-		if(leftTD.getType() == rightTD.getType()) {
-			switch(leftTD.getType()) {
-			case INT -> resultType = new TypeDescriptor(DescEnumType.INT);
-			case FLOAT -> resultType = new TypeDescriptor(DescEnumType.FLOAT);
-			default -> throw new IllegalArgumentException("Unexpected value: " + leftTD.getType());
-			}
+		if(leftTD.getType() == DescEnumType.INT && rightTD.getType() == DescEnumType.INT ) {
+			resultType = new TypeDescriptor(DescEnumType.INT);
 		}
 		else {
-			if (leftTD.getType() != rightTD.getType()) {
 				resultType = new TypeDescriptor(DescEnumType.FLOAT);
+				
+				//changing the node generated from the parsing in order to handle the FLOAT divisions
+				if (node.getOp() == LangOper.DIVIDE) {
+					node.setOp(LangOper.DIVFLOAT);
+				}
 			}
 		}
-	}
 
 	@Override //fatto
 	public void visit(NodeDecl node) {

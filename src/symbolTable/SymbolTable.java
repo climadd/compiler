@@ -8,20 +8,26 @@ public class SymbolTable {
 
 	public static HashMap<String,Attributes> symbolTableMap;
 
+	//Inner Class
 	public static class Attributes{
 		private LangType type;
-		private char register;
-		
-		//Inner Class
-		public Attributes(LangType type) {
-			this.type = type;
-		}
+		private Character register;
 		
 		//constructors
-		public Attributes(LangType type, char register) {
+		public Attributes(LangType type, Character register) {
 			this.type = type;
 			this.register = register;
 		}
+		
+		public Attributes(LangType type) {
+			this(type, null);
+		}
+		
+		public Attributes(Character register) {
+			this(null, register);
+		}
+		
+
 		
 		//getters
 		public LangType getType() {
@@ -30,6 +36,11 @@ public class SymbolTable {
 		
 		public char getRegister() {
 			return this.register;
+		}
+		
+		//setter
+		public void setRegister(char register) {
+			this.register = register;
 		}
 	}
 

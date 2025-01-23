@@ -28,6 +28,11 @@ public class NodeBinOp extends NodeExpr{
 		return this.right;
 	}
 	
+	//setter per operatore, utile x divop
+	public void setOp(LangOper type) {
+		this.op = type;
+	}
+	
 	//toString
 	public String toString() {
 		return("NodeBinOp <" + ">");
