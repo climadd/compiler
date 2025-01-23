@@ -2,29 +2,46 @@ package ast;
 
 import visitor.IVisitor;
 
+/**
+ * AST's NodeAssign
+ */
 public class NodeAssign extends NodeStm{
 
 	private NodeId id;
 	private NodeExpr expr;
 	
-	//constructor
+	/**
+	 * constructor 
+	 * @param id
+	 * @param expr
+	 */
 	public NodeAssign(NodeId id, NodeExpr expr) {
 		this.id = id;
 		this.expr = expr;
 	}
 	
-	//getters
+	/**
+	 * getter
+	 * @returns id field
+	 */
 	public NodeId getId() {
 		return this.id;
 	}
 	
+	/**
+	 * getter
+	 * @returns expr field
+	 */
 	public NodeExpr getExpr() {
 		return this.expr;
 	}
 	
-	//toString
+	/**
+	 * toString method
+	 * @returns a string that represents the node
+	 */
 	public String toString() {
-		return("NodeAssign <" + ">");
+		return("<NodeAssign: " + this.id.toString() + "," + this.expr.toString() + ">");
 	}
 	
 	/**

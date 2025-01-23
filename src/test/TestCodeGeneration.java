@@ -28,7 +28,7 @@ public class TestCodeGeneration {
 		CodeGenerationVisitor codeGenerationVisitor = new CodeGenerationVisitor();
 		node.accept(codeGenerationVisitor);
 			
-		assertEquals(true, true);	
+		assertEquals("1 6 / sa la p P", codeGenerationVisitor.getList().toString());	
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class TestCodeGeneration {
 		CodeGenerationVisitor codeGenerationVisitor = new CodeGenerationVisitor();
 		node.accept(codeGenerationVisitor);
 			
-		assertEquals(true, true);	
+		assertEquals("0 sa la 1 + sa 6 sb 1.0 6 5k / 0k la lb / + sc la p P lb p P lc p P", codeGenerationVisitor.getList().toString());	
 	}
 	
 	@Test
@@ -60,7 +60,7 @@ public class TestCodeGeneration {
 		CodeGenerationVisitor codeGenerationVisitor = new CodeGenerationVisitor();
 		node.accept(codeGenerationVisitor);
 			
-		assertEquals(true, true);	
+		assertEquals("5 3 + sa la 0.5 + sb la p P lb 4 5k / 0k sb lb p P lb 1 - sc lc lb * sc lc p P", codeGenerationVisitor.getList().toString());	
 	}
 	
 	@Test
@@ -76,7 +76,7 @@ public class TestCodeGeneration {
 		CodeGenerationVisitor codeGenerationVisitor = new CodeGenerationVisitor();
 		node.accept(codeGenerationVisitor);
 			
-		assertEquals(true, true);	
+		assertEquals("No registers left for further declarations!", codeGenerationVisitor.getLog());	
 	}
 	
 }

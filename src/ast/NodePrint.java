@@ -2,10 +2,17 @@ package ast;
 
 import visitor.IVisitor;
 
+/**
+ * AST's node for Print instructions
+ */
 public class NodePrint extends NodeStm{
 
 	private NodeId id;
 	
+	/**
+	 * constructor
+	 * @param id
+	 */
 	public NodePrint(NodeId id) {
 		this.id = id;
 	}
@@ -14,9 +21,13 @@ public class NodePrint extends NodeStm{
 	public NodeId getId() {
 		return this.id;
 	}
-	//toString
+	
+	/**
+	 * toString method
+	 * @returns a string that represents the node
+	 */
 	public String toString() {
-		return("NodePrint <" + ">");
+		return("<NodePrint " + this.id.toString() + ">");
 	}
 	
 	/**

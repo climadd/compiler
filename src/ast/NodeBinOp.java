@@ -2,13 +2,21 @@ package ast;
 
 import visitor.IVisitor;
 
+/**
+ * AST's node for binary operations
+ */
 public class NodeBinOp extends NodeExpr{
 
 	private LangOper op;
 	private NodeExpr left;
 	private NodeExpr right;
 	
-	//costruttore
+	/**
+	 * constructors
+	 * @param operator
+	 * @param left term
+	 * @param right term
+	 */
 	public  NodeBinOp (LangOper op, NodeExpr left, NodeExpr right) {
 		this.op = op;
 		this.left = left;
@@ -28,14 +36,20 @@ public class NodeBinOp extends NodeExpr{
 		return this.right;
 	}
 	
-	//setter per operatore, utile x divop
+	/**
+	 * setter for op field of NodeBinOp objects
+	 * @param type 
+	 */
 	public void setOp(LangOper type) {
 		this.op = type;
 	}
 	
-	//toString
+	/**
+	 * toString method
+	 * @returns a string that represents the node
+	 */
 	public String toString() {
-		return("NodeBinOp <" + ">");
+		return("<NodeBinOp: "  + this.left.toString() + "," + this.op.toString() + "," + this.right.toString() +  ">");
 	}
 	
 	/**

@@ -2,11 +2,17 @@ package ast;
 
 import visitor.IVisitor;
 
+/**
+ *AST's Deref node
+ */
 public class NodeDeref extends NodeExpr{
 
 	private NodeId id;
 	
-	//constructor
+	/**
+	 * constructor
+	 * @param id
+	 */
 	public NodeDeref(NodeId id) {
 		this.id = id;
 	}
@@ -16,9 +22,12 @@ public class NodeDeref extends NodeExpr{
 		return this.id;
 	}
 	
-	//toString
+	/**
+	 * toString method
+	 * @returns a string that represents the node
+	 */
 	public String toString() {
-		return("NodeDeref <" + ">");
+		return("<NodeDeref: " + this.id.toString() + ">");
 	}
 	
 	/**

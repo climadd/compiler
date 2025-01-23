@@ -2,6 +2,11 @@ package symbolTable;
 
 import java.util.ArrayList;
 
+/**
+ * Class that manages an array of Character-based registers
+ * 
+ * @author Lorenzo Mirto Bertoldo (github.com/climadd)
+ */
 public class Registers {
 
 	public static ArrayList<Character> characters;
@@ -26,7 +31,7 @@ public class Registers {
 		if(!characters.isEmpty()) {
 			return characters.remove(0);
 		}
-		else throw new RegistersException("No more registers left for further initialization instances!");
+		else throw new RegistersException("No registers left for further declarations!");
 	}
 
 

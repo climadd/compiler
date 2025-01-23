@@ -103,10 +103,10 @@ public class CodeGenerationVisitor implements IVisitor{
 		case DIVIDE -> op = " /";
 		case MINUS -> op = " -";	
 		case TIMES -> op = " *";
-		case DIVFLOAT -> op = " 5k / 0k ";
+		case DIVFLOAT -> op = " 5k / 0k";
 		}
 
-		dcCode = leftDc + " "  + rightDc + op;
+		dcCode = leftDc + " " + rightDc + op;
 	}
 
 	/**
@@ -115,36 +115,35 @@ public class CodeGenerationVisitor implements IVisitor{
 	 * If there is an initialization, it must generate code as for an assignment.
 	 */
 	@Override
-	public void visit(NodeDecl node) {
-		//PRENDO NOME ID
+	public void visit(NodeDecl node) {	
 		String id = node.getId().getName();
-		
-		//GUARDO NELLA SYMBLETABLE E CON LOOKUP MI FACCIO RESTITUIRE
-		//L'OGG ATTRIBUTES CON INFO RELATIVE
-		Attributes attribute;
-		
-		//PROVO A ALLOCARE UN REGISTRO
-		char register;
+		Attributes attributes = SymbolTable.lookup(id);
+		if (attributes == null) {
+			attributes = new Attributes(node.getType());
+			SymbolTable.enter(id, attributes);
+			node.getId().setAttributes(attributes);
+		}
+		else {
+			log += "Semantic error: Variable '" + id + "' was already declared.\n";
+			return;
+		}
+		Character register;
 		try {
 			register = Registers.newRegister(); 
 		} catch (RegistersException e) {
 			log += e.getMessage();
 			return;
 		}
+		attributes.setRegister(register);
 		
-		//ASSOCIO IL REGISTRO ALLA VARIABILE
-		node.getId().getAttributes().setRegister(register); 
-
-		//LA DICHIARAZIONE CONTINE UNA INIZIALIZZAZ?
+		// do we have an initialization in the declaration we're currently visiting?
 		if (node.getInit() != null) {
-			
-			//SE Sì INSERISCILA NEL dcCode
 			node.getInit().accept(this);
 			String init = dcCode;
 			node.getId().accept(this);
 			id = dcCode;
 
-			dcCode = init + " s" + id;
+			dcCode = " " + init + " s" + id ;
 		}
 	}
 
@@ -159,7 +158,7 @@ public class CodeGenerationVisitor implements IVisitor{
 		node.getId().accept(this);
 		String id = dcCode;
 
-		dcCode = exp + " s" + id;
+		dcCode = " " + exp + " s" + id ;
 
 	}
 
@@ -171,7 +170,7 @@ public class CodeGenerationVisitor implements IVisitor{
 	public void visit(NodePrint node) {
 		node.getId().accept(this);
 
-		dcCode = "l" + dcCode + " p P";
+		dcCode = " l" + dcCode + " p P";
 
 	}
 

@@ -4,11 +4,17 @@ import java.util.ArrayList;
 
 import visitor.IVisitor;
 
+/**
+ * AST's node that holds every declaration and statement in it
+ */
 public class NodeProgram extends NodeAST{
 
 	private ArrayList<NodeDecSt> decSts;
 	
-	//costruttore
+	/**
+	 * constructor
+	 * @param decSts
+	 */
 	public NodeProgram(ArrayList<NodeDecSt> decSts) {
 		this.decSts = decSts;
 	}
@@ -18,9 +24,12 @@ public class NodeProgram extends NodeAST{
 		return this.decSts;
 	}
 	
-	//toString
+	/**
+	 * toString method
+	 * @returns a string that represents the node
+	 */
 	public String toString() {
-		return("NodeProgram <" + ">");
+		return("<NodeProgram: " + this.decSts.toString() + ">");
 	}
 	
 	/**

@@ -3,11 +3,18 @@ package ast;
 import symbolTable.SymbolTable.Attributes;
 import visitor.IVisitor;
 
+/**
+ * AST's nodes for identifiers
+ */
 public class NodeId extends NodeAST{
 
 	private String name;
 	private Attributes attributes;
-	//constructor
+	
+	/**
+	 * constructor
+	 * @param name
+	 */
 	public NodeId(String name) {
 		this.name = name;
 	}
@@ -20,14 +27,17 @@ public class NodeId extends NodeAST{
 		return this.attributes;
 	}
 	
-	//TODO: setter 
+	//setter 
 	public void setAttributes(Attributes attributes) {
 		this.attributes = attributes;
 	}
 	
-	//toString
+	/**
+	 * toString method
+	 * @returns a string that represents the node
+	 */
 	public String toString() {
-		return("NodeId <name : " + name + ">");
+		return("<NodeId : " + this.name + ">");
 	}
 	
 	/**
