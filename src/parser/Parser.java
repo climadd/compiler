@@ -3,7 +3,7 @@ package parser;
 import java.util.ArrayList;
 
 import ast.*;
-import parser.SyntacticException.SyntaxErrorWrapper;
+import parser.SyntacticException.LexicalErrorWrapper;
 import scanner.LexicalException;
 import scanner.Scanner;
 import token.Token;
@@ -38,7 +38,7 @@ public class Parser {
 	 * @return the result of executing the scanner action.
 	 * @throws SyntacticException if such exception is thrown during execution.
 	 */
-	private <T> T wrapScanner(SyntaxErrorWrapper<T> action) throws SyntacticException {
+	private <T> T wrapScanner(LexicalErrorWrapper<T> action) throws SyntacticException {
 		try {
 			return action.execute();
 		} catch (LexicalException e) {
@@ -299,14 +299,14 @@ public class Parser {
 		case PLUS->{
 			match(TokenType.PLUS);
 			exp = parseTr();
-			expP = parseExpP(exp);
-			return new NodeBinOp(LangOper.PLUS, nodeExpr, expP);
+			expP = parseExpP(new NodeBinOp(LangOper.PLUS, nodeExpr, exp));
+			return expP;
 		}
 		case MINUS ->{
 			match(TokenType.MINUS);
 			exp = parseTr();
-			expP = parseExpP(exp);
-			return new NodeBinOp(LangOper.MINUS, nodeExpr, expP);
+			expP = parseExpP(new NodeBinOp(LangOper.MINUS, nodeExpr, exp));
+			return expP;
 		}
 		case SEMI ->{
 			return nodeExpr;
@@ -362,14 +362,14 @@ public class Parser {
 		case TIMES ->{
 			match(TokenType.TIMES);
 			exp = parseVal();
-			expP = parseTrP(exp);
-			return new NodeBinOp(LangOper.TIMES, nodeExpr, expP);
+			expP = parseTrP(new NodeBinOp(LangOper.TIMES, nodeExpr, exp));
+			return expP;
 		}
 		case DIVIDE ->{
 			match(TokenType.DIVIDE);
 			exp = parseVal();
-			expP = parseTrP(exp);
-			return new NodeBinOp(LangOper.DIVIDE, nodeExpr, expP);
+			expP = parseTrP(new NodeBinOp(LangOper.DIVIDE, nodeExpr, exp));
+			return expP;
 		}
 		case MINUS, PLUS, SEMI ->{
 			return nodeExpr;

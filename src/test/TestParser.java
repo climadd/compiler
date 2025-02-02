@@ -4,9 +4,11 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
+import ast.*;
 import parser.Parser;
 import parser.SyntacticException;
 import scanner.Scanner;
@@ -107,5 +109,63 @@ public class TestParser {
 		assertDoesNotThrow(() -> 
 		parseSoloDichPrint.parse()		
 				);
+	}
+
+	
+	//AST generation Tests
+	@Test
+	public void testParserASTGeneration() throws SyntacticException, FileNotFoundException {
+
+		Scanner scanner = new Scanner(path + "/testAST.txt");
+		Parser parser = new Parser(scanner);
+		NodeProgram nodeProgram = parser.parse();
+
+		//Explicit construction of expected AST		
+		NodeId nodeId = new NodeId("catamarano");
+		NodeExpr value4 = new NodeConst("4", LangType.TYINT);
+		NodeExpr value5 = new NodeConst("5", LangType.TYINT);
+		NodeExpr value6 = new NodeConst("6", LangType.TYINT);
+		NodeExpr value7_8 = new NodeConst("7.8", LangType.TYFLOAT);
+
+		NodeExpr timesExpr = new NodeBinOp(LangOper.TIMES, value5, value6);
+		NodeExpr divideExpr = new NodeBinOp(LangOper.DIVIDE, timesExpr, value7_8);
+		NodeExpr plusExpr = new NodeBinOp(LangOper.PLUS, value4, divideExpr);
+		NodeExpr nodeDeref = new NodeDeref(nodeId);
+		NodeExpr minusExpr = new NodeBinOp(LangOper.MINUS, plusExpr, nodeDeref);
+
+		NodeDecl nodeDecl = new NodeDecl(nodeId, LangType.TYINT, minusExpr);
+		ArrayList<NodeDecSt> declarations = new ArrayList<>();
+		declarations.add(nodeDecl);
+
+		NodeProgram explicitlyConstructedAST = new NodeProgram(declarations);
+
+		assertEquals(explicitlyConstructedAST.toString(), nodeProgram.toString());
+	}
+	
+	@Test
+	public void testParserASTGenerationPlus() throws SyntacticException, FileNotFoundException {
+
+		Scanner scanner = new Scanner(path + "/testAST2.txt");
+		Parser parser = new Parser(scanner);
+		NodeProgram nodeProgram = parser.parse();
+
+		//Explicit construction of expected AST
+		NodeId accelId = new NodeId("accelerator");
+		NodeStm printStmt = new NodePrint(accelId); 
+		
+		NodeExpr value51 = new NodeConst("51", LangType.TYINT);
+		NodeExpr value40 = new NodeConst("40", LangType.TYINT);
+		NodeExpr value00 = new NodeConst("00", LangType.TYINT);
+		
+		NodeExpr timesExpr = new NodeBinOp(LangOper.TIMES, value40, value00);
+		NodeExpr plusExpr = new NodeBinOp(LangOper.PLUS, value51, timesExpr);  
+		NodeStm assignStmt = new NodeAssign(accelId, plusExpr);
+		ArrayList<NodeDecSt> statements = new ArrayList<>();
+		statements.add(printStmt);
+		statements.add(assignStmt);
+
+		NodeProgram explicitlyConstructedAST = new NodeProgram(statements);
+
+		assertEquals(explicitlyConstructedAST.toString(), nodeProgram.toString());
 	}
 }

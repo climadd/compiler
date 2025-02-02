@@ -20,7 +20,7 @@ public class SyntacticException extends Exception {
 		super(msg);
 	}
 	
-	//INTERFACE FOR SYNTAX ERROR HANDLING IN PARSER
+	//INTERFACE FOR LEXICAL ERROR HANDLING IN PARSER
     /**
      * An interface needed to wrap methods that may throw a LexicalException.
      * <p>
@@ -29,7 +29,7 @@ public class SyntacticException extends Exception {
      *
      * @param <T> the type of the result returned by the wrapped method.
      */
-	public interface SyntaxErrorWrapper <T> {
+	public interface LexicalErrorWrapper <T> {
 		
 	   /**
          * Executes the wrapped method, which may throw a LexicalException.
@@ -38,5 +38,6 @@ public class SyntacticException extends Exception {
          * @throws LexicalException if a lexical error occurs.
          */
 		  T execute() throws LexicalException;
+		  
 	}
 }

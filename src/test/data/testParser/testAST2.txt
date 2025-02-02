@@ -1,0 +1,2 @@
+print accelerator;
+accelerator = 51 + 40 * 00;
