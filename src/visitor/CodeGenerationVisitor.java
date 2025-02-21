@@ -69,7 +69,6 @@ public class CodeGenerationVisitor implements IVisitor{
 	public void visit(NodeId node) {
 		String id = node.getName();
 		System.out.println(node.getAttributes());
-		//TODO: non faccio la lookup ma aggiungo l'info al nodo
 		dcCode = String.valueOf(SymbolTable.lookup(id).getRegister());
 	}
 
@@ -123,7 +122,6 @@ public class CodeGenerationVisitor implements IVisitor{
 	@Override
 	public void visit(NodeDecl node) {	
 		String id = node.getId().getName();
-		//TODO: tiro via la lookup
 		Attributes attributes = SymbolTable.lookup(id);
 		if (attributes == null) {
 			attributes = new Attributes(node.getType());
