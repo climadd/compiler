@@ -21,6 +21,10 @@ public class SyntacticException extends Exception {
 	}
 	
 	//INTERFACE FOR LEXICAL ERROR HANDLING IN PARSER
+	
+	//TODO: levare e gestire l'eccezione sempre nella sintattica, 
+	// ma aggiungendo al costruttore il campo cause.
+	
     /**
      * An interface needed to wrap methods that may throw a LexicalException.
      * <p>
