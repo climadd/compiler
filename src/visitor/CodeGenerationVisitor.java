@@ -68,7 +68,8 @@ public class CodeGenerationVisitor implements IVisitor{
 	@Override
 	public void visit(NodeId node) {
 		String id = node.getName();
-		System.out.println(node.getAttributes());
+		/*debug line
+		System.out.println(node.getAttributes());*/
 		dcCode = String.valueOf(SymbolTable.lookup(id).getRegister());
 	}
 
