@@ -1,23 +1,22 @@
-# AcDc Compiler
-The compilation process is divided into four phases:<br>
-    **Lexical Analysis**, to tokenize the input;<br>
-    **Syntactic Analysis**, to parse the tokens and construct an **Abstract Syntax Tree** (AST);<br>
-    **Semantic Analysis**,which includes type checking to ensure correctness;<br>
-    **Code Generation**, where the AST is transformed into Dc code.<br>
+AcDc Compiler
+-------------
+### Project Overview
+This project is a compiler that translates Ac, a simple language with integer and floating-point support, into Dc, a stack-based calculator language using reverse Polish notation. The compiler processes Ac code through lexical, syntactic, and semantic analysis before generating Dc-compatible output.
+Ac features basic arithmetic operations, variable declarations, and assignments, while Dc executes expressions using a stack-based approach. This compiler bridges the two, allowing Ac programs to be evaluated in Dc. More on [Dc Manual](https://www.gnu.org/software/bc/manual/dc-1.05/html_mono/dc.html).
 
-## Source Language: Ac
-* 2 Data types: int and float.
-* Integer literals: Sequence of digits. If starting with 0, no other digits can follow.
-* Floating-point literals: Sequence of digits followed by a "." and up to 5 digits.
-* Variables: Only lowercase English letters (a-z), must be declared before use.
-* Declaration: "int" or "float" followed by a variable, with optional initialization.
-* Expressions:Can be literals (int or float), variables, or binary expressions (+, -, *, /). Binary operands must be of the same type. int can automatically convert to float, no other conversions allowed.
-* Instructions: Assignment and Print
+Below is the installation guide to set up and run the project.
 
-## Target Language: Dc
-Stack-based, uses reverse Polish notation. One of the first cross-platform applications for Unix.
+### Installation
+This compiler was developed using **Java 17**, but it should run on any modern Java version. Before running the project, ensure that Java is installed on your system. You can follow this [installation guide](https://www.java.com/en/download/help/download_options.html) to set it up.
 
-* Usage: Start by typing "dc" in the terminal and pressing Enter. Input expressions to evaluate. Use "p" to print results and "q" to quit.
-* Operators: Basic operators include +, -, *, /, and more.
-* Precision: You can set the number of decimal digits to consider (default is 0). (Example: 5 4 / evaluates to 0 by default.)
-* more on [Dc Manual](https://www.gnu.org/software/bc/manual/dc-1.05/html_mono/dc.html)
+#### Setup Instructions:
+1. **Verify Java Installation**: Run `java -version` in the terminal to confirm Java is installed.
+2. **Clone the Repository** (if applicable): Use `git clone <repo-link>` to download the project.
+3. **Compile the Source Code**: Navigate to the project directory and use `javac <MainClass>.java`.
+4. **Run the Compiler**: Execute the program with `java <MainClass> <input-file.ac>`.
+
+## About the Compiler
+- **Lexical Analysis** – Performed by the `Scanner` class, this phase tokenizes the input stream, converting raw text into a sequence of meaningful tokens.  
+- **Syntactic Analysis** – Handled by the `Parser` class, this stage processes tokens to construct an Abstract Syntax Tree (AST), representing the program’s structure.  
+- **Semantic Analysis** – Executed by the `TypeCheckingVisitor` and its related classes, this phase ensures type correctness and enforces semantic rules.  
+- **Code Generation** – Conducted by the `CodeGenerationVisitor`, where the AST is translated into Dc code, producing the final output.  
