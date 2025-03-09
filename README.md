@@ -1,3 +1,5 @@
+<sup>Lorenzo Mirto Bertoldo @climadd</sup>
+
 AcDc Compiler
 -------------
 ### Project Overview
