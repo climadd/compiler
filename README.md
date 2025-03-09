@@ -42,3 +42,5 @@ The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its
 ### 4. Code Generation
 The final phase of compilation involves the **Code Generation** process. This is another visit to the AST, where the `CodeGenerationVisitor` class translates the AST into **Dc** code, producing the final executable output of the program.
 
+#### Code Generation Example: Translating Ac to Dc
+![CodeGeneration](resources/CodeGeneration.png)
