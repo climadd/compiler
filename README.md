@@ -21,19 +21,19 @@ Below is a structured breakdown of the key stages involved in the compilation pr
 ### 1. Lexical Analysis
 The **Lexical Analysis** phase is performed by the `Scanner` class. This stage tokenizes the input stream, converting raw text into a sequence of meaningful tokens that represent the basic elements of the source code.
 
-#### Token Structure
+#### Token Structure:
 ![Token Structure](resources/Token.png)
 
-#### Finite State Automata for Token Recognition
+#### Finite State Automata for Token Recognition:
 ![FSA](resources/FSA.png)
 
 ### 2. Syntactic Analysis
 Handled by the `Parser` class, the **Syntactic Analysis** phase processes the tokens produced in the lexical analysis. It constructs an **Abstract Syntax Tree (AST)**, which represents the hierarchical structure of the program.
 
-#### Grammar Used by the Parser
+#### Grammar Used by the Parser:
 ![Grammar](resources/ParseTable.png)
 
-#### Nodes in the AST (Output of the Parsing Process)
+#### Nodes in the AST (Output of the Parsing Process):
 ![AST Nodes](resources/ASTNodes.png)
 
 ### 3. Semantic Analysis
