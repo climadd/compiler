@@ -16,12 +16,16 @@ This compiler was developed using **Java 17**, but it should run on any modern J
 - **Run the Compiler**: Execute the program through the various test classes and `.txt` files located in the `src/test/data` directory for the compilation.
 
 ## About the Compiler
+Below is a structured breakdown of the key stages involved in the compilation process.
 
 ### 1. Lexical Analysis
 The **Lexical Analysis** phase is performed by the `Scanner` class. This stage tokenizes the input stream, converting raw text into a sequence of meaningful tokens that represent the basic elements of the source code.
 
 #### Token Structure
-![Token Structure](resources/image.png)
+![Token Structure](resources/Token.png)
+
+#### Finite State Automata for Token Recognition
+![FSA](resources/FSA.png)
 
 ### 2. Syntactic Analysis
 Handled by the `Parser` class, the **Syntactic Analysis** phase processes the tokens produced in the lexical analysis. It constructs an **Abstract Syntax Tree (AST)**, which represents the hierarchical structure of the program.
