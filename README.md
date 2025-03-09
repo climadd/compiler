@@ -21,16 +21,16 @@ This compiler was developed using **Java 17**, but it should run on any modern J
 The **Lexical Analysis** phase is performed by the `Scanner` class. This stage tokenizes the input stream, converting raw text into a sequence of meaningful tokens that represent the basic elements of the source code.
 
 #### Token Structure
-![Token Structure](path/to/image.png)
+![Token Structure](resources/image.png)
 
 ### 2. Syntactic Analysis
 Handled by the `Parser` class, the **Syntactic Analysis** phase processes the tokens produced in the lexical analysis. It constructs an **Abstract Syntax Tree (AST)**, which represents the hierarchical structure of the program.
 
 #### Grammar Used by the Parser
-![Grammar](path/to/image.png)
+![Grammar](resources/ParseTable.png)
 
 #### Nodes in the AST (Output of the Parsing Process)
-![AST Nodes](path/to/image.png)
+![AST Nodes](resources/ASTNodes.png)
 
 ### 3. Semantic Analysis
 The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its related classes. This phase ensures that the program adheres to type correctness and semantic rules. It involves visiting the AST and verifying the types of variables involved, ensuring the consistency of operations and declarations, and validating them through the use of the **Symbol Table**.
