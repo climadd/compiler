@@ -25,24 +25,29 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
 
 #### Token Structure:
 ![Token Structure](resources/Token.png)
+*Every Token and their structure. At the bottom list of Characters to be skipped.*
 
 #### Finite State Automata for Token Recognition:
 ![FSA](resources/FSA.png)
+*Scanner behaviour for Token recognition.*
 
 ### 2. Syntactic Analysis
 Handled by the `Parser` class, the **Syntactic Analysis** phase processes the tokens produced in the lexical analysis. It constructs an **Abstract Syntax Tree (AST)**, which represents the hierarchical structure of the program.
 
 #### Grammar Used by the Parser:
 ![Grammar](resources/ParseTable.png)
+*Context-free grammar rules for the Parsing process.*
 
 #### Nodes in the AST (Output of the Parsing Process):
 ![AST Nodes](resources/ASTNodes.png)
+*Structure and hierarchy of nodes within the AST.*
 
 ### 3. Semantic Analysis
 The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its related classes. This phase ensures that the program adheres to type correctness and semantic rules. It involves visiting the AST and verifying the types of variables involved, ensuring the consistency of operations and declarations, and validating them through the use of the **Symbol Table**.
 
 ### 4. Code Generation
-The final phase of compilation involves the **Code Generation** process. This is another visit to the AST, where the `CodeGenerationVisitor` class translates the AST into **Dc** code, producing the final executable output of the program.
+The final phase of compilation involves the **Code Generation** process. This is another visit to the AST, where the `CodeGenerationVisitor` class translates the AST's nodes contents into **Dc** code, producing the final executable output of the program.
 
-#### Code Generation Example: Translating Ac to Dc
+#### Code Generation Example: Generating Dc code
 ![CodeGeneration](resources/CodeGeneration.png)
+*Example of Ac to Dc translation.*
