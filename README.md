@@ -20,6 +20,7 @@ This compiler was developed using **Java 17**, but it should run on any modern J
 ## About the Compiler
 Below is a structured breakdown of the key stages involved in the compilation process.
 
+
 ### 1. Lexical Analysis
 The **Lexical Analysis** phase is performed by the `Scanner` class. This stage tokenizes the input stream, converting raw text into a sequence of meaningful tokens that represent the basic elements of the source code.
 
@@ -33,9 +34,16 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
         <figcaption><em>Every Token and their structure. At the bottom list of Characters to be skipped.</em></figcaption>
 </div>
 
-
 #### Finite State Automata for Token Recognition:
-![FSA](resources/FSA.png) <br>  *Scanner behaviour for Token recognition.*
+<div align="left">
+        <img
+            alt="FSA"
+            src="resources/FSA.png"
+            width="900">
+         <br>
+        <figcaption><em>Scanner behaviour for Token recognition.</em></figcaption>
+</div>
+
 
 ### 2. Syntactic Analysis
 Handled by the `Parser` class, the **Syntactic Analysis** phase processes the tokens produced in the lexical analysis. It constructs an **Abstract Syntax Tree (AST)**, which represents the hierarchical structure of the program.
@@ -50,13 +58,12 @@ Handled by the `Parser` class, the **Syntactic Analysis** phase processes the to
         <figcaption><em>Context-free grammar rules for the Parsing process.</em></figcaption>
 </div>
 
-
 #### Nodes in the AST (Output of the Parsing Process):
 <div align="left">
         <img
             alt="AST Nodes"
             src="resources/ASTNodes.png"
-            width="600">
+            width="800">
          <br>
         <figcaption><em>Structure and hierarchy of nodes within the AST.</em></figcaption>
 </div>
@@ -64,6 +71,7 @@ Handled by the `Parser` class, the **Syntactic Analysis** phase processes the to
 
 ### 3. Semantic Analysis
 The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its related classes. This phase ensures that the program adheres to type correctness and semantic rules. It involves visiting the AST and verifying the types of variables involved, ensuring the consistency of operations and declarations, and validating them through the use of the **Symbol Table**.
+
 
 ### 4. Code Generation
 The final phase of compilation involves the **Code Generation** process. This is another visit to the AST, where the `CodeGenerationVisitor` class translates the AST's nodes contents into **Dc** code, producing the final executable output of the program.
