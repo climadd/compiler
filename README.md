@@ -29,7 +29,8 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
             alt="Token Structure"
             src="resources/Token.png"
             width="600">
-</div>        <br> 
+</div> <br>
+
 *Every Token and their structure. At the bottom list of Characters to be skipped.*
 
 #### Finite State Automata for Token Recognition:
@@ -45,10 +46,18 @@ Handled by the `Parser` class, the **Syntactic Analysis** phase processes the to
             src="resources/ParseTable.png"
             width="600">
 </div>        <br> 
+
 *Context-free grammar rules for the Parsing process.*
 
 #### Nodes in the AST (Output of the Parsing Process):
-![AST Nodes](resources/ASTNodes.png) <br> *Structure and hierarchy of nodes within the AST.*
+<div align="left">
+        <img
+            alt="AST Nodes"
+            src="resources/ASTNodes.png"
+            width="600">
+</div>        <br>
+
+*Structure and hierarchy of nodes within the AST.*
 
 ### 3. Semantic Analysis
 The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its related classes. This phase ensures that the program adheres to type correctness and semantic rules. It involves visiting the AST and verifying the types of variables involved, ensuring the consistency of operations and declarations, and validating them through the use of the **Symbol Table**.
@@ -61,6 +70,7 @@ The final phase of compilation involves the **Code Generation** process. This is
         <img
             alt="Code Generation"
             src="resources/CodeGeneration.png"
-            width="350">
+            width="450">
 </div>         <br>
+
 *Example of Ac to Dc translation.*
