@@ -29,10 +29,10 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
             alt="Token Structure"
             src="resources/Token.png"
             width="600">
+        <br>
         <figcaption><em>Every Token and their structure. At the bottom list of Characters to be skipped.</em></figcaption>
-</div> <br>
+</div>
 
-*Every Token and their structure. At the bottom list of Characters to be skipped.*
 
 #### Finite State Automata for Token Recognition:
 ![FSA](resources/FSA.png) <br>  *Scanner behaviour for Token recognition.*
@@ -46,9 +46,10 @@ Handled by the `Parser` class, the **Syntactic Analysis** phase processes the to
             alt="Grammar"
             src="resources/ParseTable.png"
             width="600">
-</div>        <br> 
+                <br>
+        <figcaption><em>Context-free grammar rules for the Parsing process.</em></figcaption>
+</div>
 
-*Context-free grammar rules for the Parsing process.*
 
 #### Nodes in the AST (Output of the Parsing Process):
 <div align="left">
@@ -56,9 +57,10 @@ Handled by the `Parser` class, the **Syntactic Analysis** phase processes the to
             alt="AST Nodes"
             src="resources/ASTNodes.png"
             width="600">
-</div>        <br>
+         <br>
+        <figcaption><em>Structure and hierarchy of nodes within the AST.</em></figcaption>
+</div>
 
-*Structure and hierarchy of nodes within the AST.*
 
 ### 3. Semantic Analysis
 The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its related classes. This phase ensures that the program adheres to type correctness and semantic rules. It involves visiting the AST and verifying the types of variables involved, ensuring the consistency of operations and declarations, and validating them through the use of the **Symbol Table**.
@@ -72,6 +74,6 @@ The final phase of compilation involves the **Code Generation** process. This is
             alt="Code Generation"
             src="resources/CodeGeneration.png"
             width="450">
-</div>         <br>
-
-*Example of Ac to Dc translation.*
+                 <br>
+        <figcaption><em>Example of Ac to Dc translation.</em></figcaption>
+</div>  
