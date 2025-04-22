@@ -39,7 +39,7 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
         <img
             alt="FSA"
             src="resources/FSA.png"
-            width="900">
+            width="600">
          <br>
         <figcaption><em>Scanner behaviour for Token recognition.</em></figcaption>
 </div>
