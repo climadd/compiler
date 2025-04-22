@@ -29,9 +29,8 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
             alt="Token Structure"
             src="resources/Token.png"
             width="600">
-</div>
-
-![Token Structure](resources/Token.png) <br> *Every Token and their structure. At the bottom list of Characters to be skipped.*
+</div>        <br> 
+*Every Token and their structure. At the bottom list of Characters to be skipped.*
 
 #### Finite State Automata for Token Recognition:
 ![FSA](resources/FSA.png) <br>  *Scanner behaviour for Token recognition.*
@@ -40,7 +39,13 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
 Handled by the `Parser` class, the **Syntactic Analysis** phase processes the tokens produced in the lexical analysis. It constructs an **Abstract Syntax Tree (AST)**, which represents the hierarchical structure of the program.
 
 #### Grammar Used by the Parser:
-![Grammar](resources/ParseTable.png) <br> *Context-free grammar rules for the Parsing process.*
+<div align="left">
+        <img
+            alt="Grammar"
+            src="resources/ParseTable.png"
+            width="600">
+</div>        <br> 
+*Context-free grammar rules for the Parsing process.*
 
 #### Nodes in the AST (Output of the Parsing Process):
 ![AST Nodes](resources/ASTNodes.png) <br> *Structure and hierarchy of nodes within the AST.*
@@ -52,4 +57,10 @@ The **Semantic Analysis** phase is executed by the `TypeCheckingVisitor` and its
 The final phase of compilation involves the **Code Generation** process. This is another visit to the AST, where the `CodeGenerationVisitor` class translates the AST's nodes contents into **Dc** code, producing the final executable output of the program.
 
 #### Code Generation Example: Generating Dc code
-![CodeGeneration](resources/CodeGeneration.png) <br> *Example of Ac to Dc translation.*
+<div align="left">
+        <img
+            alt="Code Generation"
+            src="resources/CodeGeneration.png"
+            width="350">
+</div>         <br>
+*Example of Ac to Dc translation.*
