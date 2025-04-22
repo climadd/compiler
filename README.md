@@ -29,6 +29,7 @@ The **Lexical Analysis** phase is performed by the `Scanner` class. This stage t
             alt="Token Structure"
             src="resources/Token.png"
             width="600">
+        <figcaption><em>Every Token and their structure. At the bottom list of Characters to be skipped.</em></figcaption>
 </div> <br>
 
 *Every Token and their structure. At the bottom list of Characters to be skipped.*
