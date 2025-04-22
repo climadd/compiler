@@ -24,7 +24,12 @@ Below is a structured breakdown of the key stages involved in the compilation pr
 The **Lexical Analysis** phase is performed by the `Scanner` class. This stage tokenizes the input stream, converting raw text into a sequence of meaningful tokens that represent the basic elements of the source code.
 
 #### Token Structure:
-<img src="resources/Token.png" style="display: inline-block; margin: 0 auto; max-width: "70"> <br>
+<div align="left">
+        <img
+            alt="Token Structure"
+            src="resources/Token.png"
+            width="50">
+</div>
 
 ![Token Structure](resources/Token.png) <br> *Every Token and their structure. At the bottom list of Characters to be skipped.*
 
